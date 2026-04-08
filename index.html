@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Identity — Theme Selection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Carattere&family=Cormorant+SC:wght@400;600&family=Inter:ital,wght@0,300;0,400;0,500;1,300&family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="desktop" id="desktop">
+
+  <!-- Layer 1: Wallpaper -->
+  <div class="wallpaper-layer">
+    <div class="wallpaper wallpaper--base"></div>
+  </div>
+
+  <!-- Layer 2: Widgets (left column) -->
+  <div class="widgets-layer">
+
+    <!-- Clock Widget -->
+    <div class="widget-card widget--clock">
+      <div class="widget-header">
+        <span class="widget-icon widget-icon--green">●</span>
+        <span class="widget-label">Current Time</span>
+      </div>
+      <div class="clock-time" id="clockTime">11:09 AM</div>
+      <div class="clock-date" id="clockDate">Wednesday, April 8, 2026</div>
+    </div>
+
+    <!-- Weather Widget -->
+    <div class="widget-card widget--weather">
+      <div class="widget-header">
+        <span class="widget-icon widget-icon--blue">●</span>
+        <span class="widget-label">Weather</span>
+        <span class="widget-location">Atlanta, GA</span>
+      </div>
+      <div class="weather-body">
+        <div class="weather-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <circle cx="22" cy="22" r="10" fill="var(--accent)"/>
+            <path d="M22 8V4M22 40v-4M8 22H4M40 22h-4M12.3 12.3l-2.8-2.8M35.3 35.3l-2.8-2.8M12.3 31.7l-2.8 2.8M35.3 8.5l-2.8 2.8" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M28 26c2.5 0 4.5-1 6-3 .3 1.8-.2 3.8-1.5 5.3C31 30 28.8 31 26 31H16c-3.3 0-6-2.2-6-5s2.7-5 6-5c.3-3.3 3-6 6.5-6 3 0 5.5 2 6.2 4.8C30.5 20.5 32 22 32 24c0 1.1-.5 2-1.3 2.7" fill="var(--card-bg)" stroke="var(--text-muted)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="weather-info">
+          <div class="weather-temp">72°F</div>
+          <div class="weather-desc">Partly Cloudy</div>
+        </div>
+      </div>
+      <div class="weather-footer">
+        <div class="weather-stat">
+          <span class="weather-stat__icon">💧</span>
+          <span class="weather-stat__value">45%</span>
+        </div>
+        <div class="weather-stat">
+          <span class="weather-stat__icon">💨</span>
+          <span class="weather-stat__value">8 mph</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Widget -->
+    <div class="widget-card widget--upcoming">
+      <div class="widget-header">
+        <span class="widget-icon widget-icon--red">●</span>
+        <span class="widget-label">Upcoming</span>
+      </div>
+      <div class="upcoming-list">
+        <div class="upcoming-item">
+          <div class="upcoming-item__name">Team Meeting</div>
+          <div class="upcoming-item__time">Today at 2:00 PM</div>
+        </div>
+        <div class="upcoming-item">
+          <div class="upcoming-item__name">Project Deadline</div>
+          <div class="upcoming-item__time">Tomorrow</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Layer 3: File Icons (right column) -->
+  <div class="icons-layer">
+    <div class="file-icon">
+      <div class="icon-glyph icon-glyph--blue">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>
+      </div>
+      <span class="icon-label">Documents</span>
+    </div>
+    <div class="file-icon">
+      <div class="icon-glyph icon-glyph--yellow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>
+      </div>
+      <span class="icon-label">Projects</span>
+    </div>
+    <div class="file-icon">
+      <div class="icon-glyph icon-glyph--green">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5zm1 14l3-4 2 2.5 3-4 4 5.5H6z"/></svg>
+      </div>
+      <span class="icon-label">Vacation.jpg</span>
+    </div>
+    <div class="file-icon">
+      <div class="icon-glyph icon-glyph--gray">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+      </div>
+      <span class="icon-label">Notes.txt</span>
+    </div>
+    <div class="file-icon">
+      <div class="icon-glyph icon-glyph--teal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      </div>
+      <span class="icon-label">Downloads</span>
+    </div>
+    <div class="file-icon">
+      <div class="icon-glyph icon-glyph--purple">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <span class="icon-label">Video.mp4</span>
+    </div>
+  </div>
+
+  <!-- Layer 4: Dock -->
+  <div class="dock">
+    <div class="dock__item" title="Mail">
+      <svg class="dock__icon dock__icon--blue" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+    </div>
+    <div class="dock__item" title="Calendar">
+      <svg class="dock__icon dock__icon--red" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 16H5V8h14v11z"/></svg>
+    </div>
+    <div class="dock__item" title="Files">
+      <svg class="dock__icon dock__icon--orange" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>
+    </div>
+    <div class="dock__item" title="Music">
+      <svg class="dock__icon dock__icon--pink" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+    </div>
+    <div class="dock__item" title="Photos">
+      <svg class="dock__icon dock__icon--green" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+    </div>
+    <div class="dock__item" title="Browser">
+      <svg class="dock__icon dock__icon--cyan" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10A15.3 15.3 0 0 1 12 2z" fill="none" stroke="var(--card-bg)" stroke-width="1.5"/></svg>
+    </div>
+    <div class="dock__item" title="Messages">
+      <svg class="dock__icon dock__icon--emerald" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+    </div>
+    <div class="dock__separator"></div>
+    <div class="dock__item" title="Settings">
+      <svg class="dock__icon dock__icon--gray" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54a7.04 7.04 0 0 0-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.07 7.07 0 0 0-.06.94c0 .32.02.64.06.94L2.86 14.5a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54a7.04 7.04 0 0 0 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/></svg>
+    </div>
+  </div>
+
+  <!-- Layer 5: Theme Dialog -->
+  <div class="theme-dialog" id="themeDialog">
+    <div class="dialog-titlebar">
+      <div class="traffic-lights">
+        <button class="tl-btn tl--close" aria-label="Close"></button>
+        <button class="tl-btn tl--min" aria-label="Minimize"></button>
+        <button class="tl-btn tl--expand" aria-label="Expand"></button>
+      </div>
+      <span class="dialog-title-text">Choose Your World</span>
+      <div class="dialog-titlebar__actions">
+        <span class="dialog-action">—</span>
+        <span class="dialog-action">□</span>
+        <span class="dialog-action">×</span>
+      </div>
+    </div>
+    <div class="dialog-body">
+      <div class="theme-tabs" role="tablist">
+        <button class="theme-tab" data-theme="nature" role="tab">Overgrown Ruins</button>
+        <button class="theme-tab" data-theme="divine" role="tab">Divine</button>
+        <button class="theme-tab" data-theme="cyberpunk" role="tab">Cyberpunk</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
