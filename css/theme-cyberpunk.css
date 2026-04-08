@@ -1,0 +1,647 @@
+/* ================================================================
+   theme-cyberpunk.css
+   All .theme-cyberpunk scoped rules and keyframes.
+   Token overrides (CSS variables) live in base.css.
+   This file: keyframes, wallpaper image, desktop overlays,
+   widget panels, icons, dock, dialog, tabs.
+
+   Sections:
+   12.0  Animations (keyframes)
+   12.1  Wallpaper + desktop overlays
+   12.2  Widget cards — holographic panels
+   12.2a Widget label system IDs
+   12.2b Clock panel
+   12.2c Weather panel
+   12.2d Upcoming panel
+   12.3  File icons — neon glyphs
+   12.4  Dock — floating holographic bar
+   12.5  Theme dialog — terminal control window
+   12.6  Theme tabs — illuminated modules
+   ================================================================ */
+
+/* ── 12.0 Animations ─────────────────────────────────────────── */
+
+@keyframes cp-flicker {
+  0%, 94%, 97%, 100% { opacity: 1; }
+  95%   { opacity: 0.86; }
+  96%   { opacity: 1; }
+  96.5% { opacity: 0.92; }
+}
+
+@keyframes cp-dialog-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(0,255,255,0.15),
+      0 0 24px rgba(0,255,255,0.18),
+      0 0 60px rgba(0,255,255,0.06),
+      0 12px 48px rgba(0,0,0,0.80),
+      inset 0 1px 0 rgba(0,255,255,0.28),
+      inset 0 0 40px rgba(0,255,255,0.04);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(0,255,255,0.28),
+      0 0 40px rgba(0,255,255,0.38),
+      0 0 90px rgba(0,255,255,0.16),
+      0 12px 48px rgba(0,0,0,0.80),
+      inset 0 1px 0 rgba(0,255,255,0.45),
+      inset 0 0 40px rgba(0,255,255,0.08);
+  }
+}
+
+@keyframes cp-scan-sweep {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes cp-glitch-x {
+  0%, 88%, 100% { transform: none; }
+  90% { transform: translateX(-3px) skewX(-1deg); }
+  92% { transform: translateX(3px)  skewX(1deg); }
+  94% { transform: translateX(-1px); }
+  96% { transform: none; }
+}
+
+@keyframes cp-underglow-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1.0; }
+}
+
+/* ── 12.1 Wallpaper image + desktop overlays ─────────────────── */
+
+.theme-cyberpunk .wallpaper--base {
+  background-image: url('../assets/bg-cyberpunk.jpg');
+}
+
+/* Persistent scanlines over the whole desktop */
+.theme-cyberpunk .wallpaper-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent              0px,
+    transparent              2px,
+    rgba(0,255,255,0.018)    2px,
+    rgba(0,255,255,0.018)    3px
+  );
+}
+
+/* Perspective grid overlay */
+.theme-cyberpunk #desktop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.028) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Corner atmosphere blooms */
+.theme-cyberpunk #desktop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 45% 45% at 0%   100%, rgba(255,0,102,0.10) 0%, transparent 100%),
+    radial-gradient(ellipse 45% 45% at 100% 0%,   rgba(0,255,255,0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 30% 30% at 100% 100%, rgba(130,0,255,0.07) 0%, transparent 100%);
+}
+
+/* ── 12.2 Widget cards — holographic panels ─────────────────── */
+
+.theme-cyberpunk .widget-card {
+  position: relative;
+  overflow: visible;
+  background: linear-gradient(
+    140deg,
+    rgba(0,255,255,0.07)  0%,
+    rgba(8,10,26,0.93)    25%,
+    rgba(4,5,18,0.96)     65%,
+    rgba(255,0,102,0.05) 100%
+  );
+  border: 1px solid rgba(0,255,255,0.45);
+  box-shadow:
+    0 0 0 1px rgba(0,255,255,0.10),
+    0 0 18px  rgba(0,255,255,0.14),
+    0 6px 28px rgba(0,0,0,0.75),
+    inset 0 0 28px rgba(0,255,255,0.04),
+    inset 0 1px 0   rgba(0,255,255,0.22);
+  animation: cp-flicker 9s linear infinite;
+  transition: box-shadow 200ms ease, filter 200ms ease, transform 200ms ease;
+}
+
+.theme-cyberpunk .widget-card:nth-child(2) { animation-delay: 3s; }
+.theme-cyberpunk .widget-card:nth-child(3) { animation-delay: 6s; }
+
+.theme-cyberpunk .widget-card:hover {
+  filter: brightness(1.06);
+  box-shadow:
+    0 0 0 1px rgba(0,255,255,0.20),
+    0 0 28px  rgba(0,255,255,0.25),
+    0 6px 28px rgba(0,0,0,0.75),
+    inset 0 0 28px rgba(0,255,255,0.07),
+    inset 0 1px 0   rgba(0,255,255,0.30);
+}
+
+/* Top neon accent trim */
+.theme-cyberpunk .widget-card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0,255,255,0.30) 15%,
+    rgba(0,255,255,0.95) 40%,
+    rgba(0,255,255,0.95) 60%,
+    rgba(0,255,255,0.30) 85%,
+    transparent 100%
+  );
+  box-shadow: 0 0 8px rgba(0,255,255,0.80), 0 0 16px rgba(0,255,255,0.35);
+  z-index: 4;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+
+/* Corner brackets + micro data labels */
+.theme-cyberpunk .widget-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  z-index: 4;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 130' preserveAspectRatio='none'%3E%3Cpath d='M 0,16 L 0,0 L 16,0' stroke='%2300FFFF' stroke-width='1.5' fill='none' stroke-opacity='0.85'/%3E%3Cpath d='M 220,16 L 220,0 L 204,0' stroke='%2300FFFF' stroke-width='1.5' fill='none' stroke-opacity='0.85'/%3E%3Cpath d='M 0,114 L 0,130 L 16,130' stroke='%2300FFFF' stroke-width='1.5' fill='none' stroke-opacity='0.85'/%3E%3Cpath d='M 220,114 L 220,130 L 204,130' stroke='%2300FFFF' stroke-width='1.5' fill='none' stroke-opacity='0.85'/%3E%3Ctext x='4' y='127' font-size='5.5' fill='%2300FFFF' fill-opacity='0.40' font-family='monospace'%3ENOD%3C/text%3E%3Ctext x='190' y='127' font-size='5.5' fill='%2300FFFF' fill-opacity='0.35' font-family='monospace'%3ESYS%3C/text%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ── 12.2a Widget labels → system IDs ───────────────────────── */
+
+.theme-cyberpunk .widget-icon--green { color: #00FF66; text-shadow: 0 0 6px #00FF66; }
+.theme-cyberpunk .widget-icon--blue  { color: #00CCFF; text-shadow: 0 0 6px #00CCFF; }
+.theme-cyberpunk .widget-icon--red   { color: #FF0066; text-shadow: 0 0 6px #FF0066; }
+
+.theme-cyberpunk .widget-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0;
+  letter-spacing: 0.12em;
+}
+
+.theme-cyberpunk .widget--clock .widget-label::after {
+  content: 'SYS.TIME';
+  font-size: 8.5px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: rgba(0,255,255,0.75);
+  text-shadow: 0 0 8px rgba(0,255,255,0.70);
+  text-transform: uppercase;
+}
+
+.theme-cyberpunk .widget--weather .widget-label::after {
+  content: 'WEATHER NODE';
+  font-size: 8.5px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: rgba(0,255,255,0.75);
+  text-shadow: 0 0 8px rgba(0,255,255,0.70);
+  text-transform: uppercase;
+}
+
+.theme-cyberpunk .widget--upcoming .widget-label::after {
+  content: 'SCHED.DATA';
+  font-size: 8.5px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: rgba(0,255,255,0.75);
+  text-shadow: 0 0 8px rgba(0,255,255,0.70);
+  text-transform: uppercase;
+}
+
+.theme-cyberpunk .widget-location {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 7.5px;
+  letter-spacing: 0.10em;
+  color: rgba(255,0,102,0.65);
+  text-transform: uppercase;
+  text-shadow: 0 0 6px rgba(255,0,102,0.50);
+}
+
+/* ── 12.2b Clock panel ───────────────────────────────────────── */
+
+.theme-cyberpunk .widget--clock {
+  box-shadow:
+    0 0 0 1px rgba(0,255,255,0.16),
+    0 0 24px  rgba(0,255,255,0.18),
+    0 6px 36px rgba(0,0,0,0.82),
+    inset 0 0 36px rgba(0,255,255,0.05),
+    inset 0 1px 0   rgba(0,255,255,0.28);
+  animation: cp-flicker 9s linear infinite, cp-glitch-x 14s linear infinite;
+}
+
+.theme-cyberpunk .clock-time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #00FFFF;
+  text-shadow:
+    0 0 8px  rgba(0,255,255,1.0),
+    0 0 18px rgba(0,255,255,0.65),
+    0 0 40px rgba(0,255,255,0.30),
+    0 0 80px rgba(0,255,255,0.12);
+  line-height: 1.0;
+}
+
+.theme-cyberpunk .clock-date {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  color: rgba(0,255,255,0.50);
+  text-transform: uppercase;
+}
+
+/* ── 12.2c Weather panel ─────────────────────────────────────── */
+
+.theme-cyberpunk .weather-temp {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #00FFFF;
+  text-shadow: 0 0 10px rgba(0,255,255,0.75), 0 0 24px rgba(0,255,255,0.35);
+}
+
+.theme-cyberpunk .weather-desc {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(0,255,255,0.50);
+  text-transform: uppercase;
+}
+
+.theme-cyberpunk .weather-footer {
+  border-top: 1px solid rgba(0,255,255,0.20);
+}
+
+.theme-cyberpunk .weather-stat {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(0,200,255,0.60);
+}
+
+/* ── 12.2d Upcoming panel ────────────────────────────────────── */
+
+.theme-cyberpunk .upcoming-item__name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(0,255,255,0.72);
+}
+
+.theme-cyberpunk .upcoming-item__time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  color: rgba(255,0,102,0.65);
+  text-shadow: 0 0 6px rgba(255,0,102,0.40);
+}
+
+/* ── 12.3 File icons — neon glyphs ──────────────────────────── */
+
+.theme-cyberpunk .file-icon {
+  background: rgba(0, 8, 24, 0.42);
+  border: 1px solid rgba(0,255,255,0.35);
+  box-shadow: 0 0 6px rgba(0,255,255,0.10), inset 0 0 4px rgba(0,255,255,0.04);
+  backdrop-filter: blur(4px);
+  position: relative;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease, border-color 180ms ease;
+}
+
+.theme-cyberpunk .file-icon:hover {
+  transform: translateY(-4px) scale(1.04);
+  border-color: rgba(0,255,255,0.55);
+  box-shadow:
+    0 0 14px rgba(0,255,255,0.35),
+    0 6px 20px rgba(0,0,0,0.55),
+    0 0 28px rgba(0,255,255,0.14);
+  filter: brightness(1.18);
+}
+
+.theme-cyberpunk .icon-glyph {
+  filter: drop-shadow(0 0 5px currentColor) drop-shadow(0 0 2px currentColor);
+  opacity: 0.92;
+}
+
+.theme-cyberpunk .icon-glyph--blue   { color: #00BBFF; }
+.theme-cyberpunk .icon-glyph--yellow { color: #FFD600; }
+.theme-cyberpunk .icon-glyph--green  { color: #00FF88; }
+.theme-cyberpunk .icon-glyph--gray   { color: #5070A0; }
+.theme-cyberpunk .icon-glyph--teal   { color: #00FFFF; }
+.theme-cyberpunk .icon-glyph--purple { color: #CC00FF; }
+
+.theme-cyberpunk .icon-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 7.5px;
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(0,255,255,0.55);
+  text-shadow: 0 0 6px rgba(0,255,255,0.45);
+  opacity: 1;
+}
+
+/* ── 12.4 Dock — floating holographic bar ────────────────────── */
+
+.theme-cyberpunk .dock {
+  background: linear-gradient(
+    to bottom,
+    rgba(0,18,32,0.90) 0%,
+    rgba(0,10,22,0.96) 100%
+  );
+  border: 1px solid rgba(0,255,255,0.42);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 0 0 1px rgba(0,255,255,0.10),
+    0 0 22px  rgba(0,255,255,0.20),
+    0 10px 36px rgba(0,0,0,0.72),
+    inset 0  1px 0 rgba(0,255,255,0.28),
+    inset 0 -1px 0 rgba(0,255,255,0.10);
+}
+
+/* Top neon trim line */
+.theme-cyberpunk .dock::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 8%; right: 8%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0,255,255,0.85) 20%,
+    rgba(0,255,255,0.95) 50%,
+    rgba(0,255,255,0.85) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px rgba(0,255,255,0.80), 0 0 22px rgba(0,255,255,0.40);
+  z-index: 3;
+  border-radius: 2px;
+}
+
+/* Neon underglow + reflection beneath dock */
+.theme-cyberpunk .dock::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: 5%; right: 5%;
+  height: 20px;
+  background: radial-gradient(
+    ellipse 80% 100% at 50% 0%,
+    rgba(0,255,255,0.30) 0%,
+    rgba(0,255,255,0.10) 40%,
+    transparent 100%
+  );
+  filter: blur(5px);
+  pointer-events: none;
+  z-index: -1;
+  animation: cp-underglow-pulse 2.5s ease-in-out infinite;
+}
+
+.theme-cyberpunk .dock__separator {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0,255,255,0.50),
+    transparent
+  );
+}
+
+.theme-cyberpunk .dock__item {
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, filter 160ms ease;
+}
+
+.theme-cyberpunk .dock__item:hover {
+  transform: scale(1.18) translateY(-7px);
+  background: rgba(0,255,255,0.12);
+  box-shadow:
+    0 0 18px rgba(0,255,255,0.50),
+    0 8px 24px rgba(0,0,0,0.55),
+    0 0 36px rgba(0,255,255,0.20);
+  filter: brightness(1.25) drop-shadow(0 0 7px rgba(0,255,255,0.85));
+}
+
+/* Neon tint on all dock icons */
+.theme-cyberpunk .dock__icon {
+  filter: saturate(0.5) brightness(0.80) hue-rotate(170deg);
+}
+
+/* ── 12.5 Theme dialog — terminal control window ─────────────── */
+
+.theme-cyberpunk .theme-dialog {
+  background: linear-gradient(
+    155deg,
+    rgba(0,18,34,0.97)  0%,
+    rgba(0,10,22,0.98)  55%,
+    rgba(4,0,18,0.97)  100%
+  );
+  border: 1px solid rgba(0,255,255,0.55);
+  overflow: hidden;
+  animation: cp-dialog-glow 2.8s ease-in-out infinite;
+}
+
+/* Corner bracket ornaments */
+.theme-cyberpunk .theme-dialog::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  z-index: 10;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 348 120' preserveAspectRatio='none'%3E%3Cpath d='M 0,24 L 0,0 L 24,0' stroke='%2300FFFF' stroke-width='2' fill='none' stroke-opacity='0.92'/%3E%3Cpath d='M 348,24 L 348,0 L 324,0' stroke='%2300FFFF' stroke-width='2' fill='none' stroke-opacity='0.92'/%3E%3Cpath d='M 0,96 L 0,120 L 24,120' stroke='%2300FFFF' stroke-width='2' fill='none' stroke-opacity='0.92'/%3E%3Cpath d='M 348,96 L 348,120 L 324,120' stroke='%2300FFFF' stroke-width='2' fill='none' stroke-opacity='0.92'/%3E%3Ctext x='28' y='14' font-size='6.5' fill='%2300FFFF' fill-opacity='0.48' font-family='monospace' letter-spacing='1.5'%3ESYS.v2.1%3C/text%3E%3Ctext x='248' y='14' font-size='6.5' fill='%2300FFFF' fill-opacity='0.42' font-family='monospace' letter-spacing='1.5'%3EID:0xF4A2%3C/text%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Animated scan-sweep line across top */
+.theme-cyberpunk .theme-dialog::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent    0%,
+    rgba(0,255,255,0.0)  10%,
+    rgba(0,255,255,0.85) 35%,
+    rgba(255,0,102,0.65) 65%,
+    rgba(0,255,255,0.0)  90%,
+    transparent    100%
+  );
+  background-size: 200% 100%;
+  animation: cp-scan-sweep 2.8s linear infinite;
+  box-shadow: 0 0 8px rgba(0,255,255,0.65);
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* Titlebar */
+.theme-cyberpunk .dialog-titlebar {
+  background: linear-gradient(
+    to bottom,
+    rgba(0,255,255,0.08) 0%,
+    rgba(0,255,255,0.03) 100%
+  );
+  border-bottom: 1px solid rgba(0,255,255,0.28);
+}
+
+/* Replace Mac traffic lights with neon indicator squares */
+.theme-cyberpunk .tl-btn {
+  border-radius: 1px;
+  width: 10px;
+  height: 10px;
+}
+
+.theme-cyberpunk .tl--close {
+  background: rgba(255,0,102,0.20);
+  border: 1px solid rgba(255,0,102,0.65);
+  box-shadow: 0 0 6px rgba(255,0,102,0.55), inset 0 0 3px rgba(255,0,102,0.20);
+}
+
+.theme-cyberpunk .tl--min {
+  background: rgba(0,255,255,0.12);
+  border: 1px solid rgba(0,255,255,0.55);
+  box-shadow: 0 0 6px rgba(0,255,255,0.45), inset 0 0 3px rgba(0,255,255,0.15);
+}
+
+.theme-cyberpunk .tl--expand {
+  background: rgba(130,0,255,0.18);
+  border: 1px solid rgba(130,0,255,0.60);
+  box-shadow: 0 0 6px rgba(130,0,255,0.55), inset 0 0 3px rgba(130,0,255,0.18);
+}
+
+/* Title — CHOOSE YOUR WORLD */
+.theme-cyberpunk .dialog-title-text {
+  font-size: 0;
+  position: relative;
+}
+
+.theme-cyberpunk .dialog-title-text::after {
+  content: 'CHOOSE YOUR WORLD';
+  font-size: 9.5px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(0,255,255,0.90);
+  text-shadow:
+    0 0 8px  rgba(0,255,255,0.85),
+    0 0 18px rgba(0,255,255,0.45),
+    0 0 32px rgba(0,255,255,0.18);
+}
+
+.theme-cyberpunk .dialog-action {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  color: rgba(0,255,255,0.38);
+  letter-spacing: 0;
+}
+
+/* ── 12.6 Theme tabs — illuminated modules ───────────────────── */
+
+.theme-cyberpunk .theme-tabs {
+  gap: 8px;
+}
+
+.theme-cyberpunk .theme-tab {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(0,255,255,0.68);
+  background: rgba(0,255,255,0.04);
+  border: 1px solid rgba(0,255,255,0.32);
+  padding: 10px 0 7px;
+  position: relative;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease, filter 150ms ease, border-color 150ms ease;
+}
+
+/* IDLE / ACTIVE status badge below button text */
+.theme-cyberpunk .theme-tab::after {
+  content: '[ IDLE ]';
+  display: block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 6.5px;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  color: rgba(0,255,255,0.32);
+  margin-top: 5px;
+}
+
+.theme-cyberpunk .theme-tab:hover {
+  transform: translateY(-2px);
+  background: rgba(0,255,255,0.10);
+  border-color: rgba(0,255,255,0.62);
+  color: rgba(0,255,255,0.95);
+  box-shadow:
+    0 0 14px rgba(0,255,255,0.32),
+    0 0 28px rgba(0,255,255,0.14),
+    inset 0 1px 0 rgba(0,255,255,0.28);
+  filter: brightness(1.12);
+}
+
+.theme-cyberpunk .theme-tab--active {
+  background: rgba(0,255,255,0.09);
+  border-color: rgba(0,255,255,0.72);
+  color: #00FFFF;
+  box-shadow:
+    0 0 18px rgba(0,255,255,0.45),
+    0 0 36px rgba(0,255,255,0.18),
+    0 0  0 1px rgba(0,255,255,0.20),
+    inset 0 1px 0 rgba(0,255,255,0.32);
+  text-shadow: 0 0 8px rgba(0,255,255,0.90);
+}
+
+.theme-cyberpunk .theme-tab--active::after {
+  content: '[ ACTIVE ]';
+  color: rgba(0,255,255,0.68);
+  text-shadow: 0 0 6px rgba(0,255,255,0.55);
+}
+
+/* ── 12.7 Applied structural refinement (full apply only) ─────── */
+.theme-cyberpunk .theme-dialog {
+  border-radius: 3px;
+  border-width: 1px;
+  box-shadow:
+    var(--shadow-dialog),
+    0 0 0 1px rgba(0, 255, 255, 0.24),
+    0 0 30px rgba(0, 220, 255, 0.14);
+}
+
+.theme-cyberpunk .widget-card {
+  border-radius: 2px;
+  border-color: rgba(0, 255, 255, 0.40);
+  box-shadow:
+    var(--shadow-card),
+    0 0 0 1px rgba(0, 255, 255, 0.16),
+    inset 0 1px 0 rgba(120, 236, 255, 0.14);
+}
+
+.theme-cyberpunk .file-icon {
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 255, 255, 0.28);
+}

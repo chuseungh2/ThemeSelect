@@ -1,0 +1,994 @@
+/* ================================================================
+   components.css
+   Shared component layout and styling — theme-agnostic.
+   All rules here use CSS variables from base.css so they
+   automatically adapt when a .theme-* class activates.
+
+   Sections:
+   5.  Wallpaper layer
+   6.  Widget cards (clock, weather, upcoming)
+   7.  File icons
+   8.  Dock
+   9.  Theme dialog
+   ================================================================ */
+
+/* ──────────────────────────────────────────────────────────────
+   5. LAYER 1 — Wallpaper
+   ────────────────────────────────────────────────────────────── */
+.wallpaper-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transition: filter 280ms ease, opacity 280ms ease;
+}
+
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+/* .wallpaper--base is the shared surface used by all themes.
+   It reads --bg-base and --bg-gradient, which themes override.
+   Theme-specific image overrides live in each theme-*.css file. */
+.wallpaper--base {
+  background-color: var(--bg-base);
+  background-image: var(--bg-gradient);
+  transition: background-color var(--transition-theme);
+}
+
+/* Noise texture overlay — barely visible grain */
+.wallpaper--base::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  pointer-events: none;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   6. LAYER 2 — Widget Cards
+   ────────────────────────────────────────────────────────────── */
+.widgets-layer {
+  position: absolute;
+  top: 44px;
+  left: 36px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+  transition: opacity 260ms ease, transform 320ms ease;
+}
+
+.widget-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 16px 20px;
+  pointer-events: auto;
+  width: 220px;
+  transition:
+    background-color var(--transition-theme),
+    border-color     var(--transition-theme),
+    border-radius    var(--transition-theme),
+    box-shadow       var(--transition-theme);
+}
+
+/* Widget Header */
+.widget-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.widget-icon {
+  font-size: 8px;
+  line-height: 1;
+}
+
+.widget-icon--green { color: var(--status-green); }
+.widget-icon--blue  { color: var(--status-blue);  }
+.widget-icon--red   { color: var(--status-red);   }
+
+.widget-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  transition: color var(--transition-theme);
+}
+
+.widget-location {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: color var(--transition-theme);
+}
+
+/* Clock — primary emphasis */
+.widget--clock {
+  box-shadow: var(--shadow-card-elevated);
+  padding: 18px 22px;
+}
+
+/* Signature font applied to the clock display — the most prominent
+   text moment and the clearest expression of theme identity. */
+.clock-time {
+  font-family: var(--font-signature);
+  font-size: 44px;
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  line-height: 1.05;
+  margin-bottom: 6px;
+  transition: color var(--transition-theme);
+}
+
+.clock-date {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+  transition: color var(--transition-theme);
+}
+
+/* Weather */
+.weather-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.weather-icon svg {
+  display: block;
+}
+
+.weather-temp {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1;
+  transition: color var(--transition-theme);
+}
+
+.weather-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  transition: color var(--transition-theme);
+}
+
+.weather-footer {
+  display: flex;
+  gap: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-divider);
+  transition: border-color var(--transition-theme);
+}
+
+.weather-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  transition: color var(--transition-theme);
+}
+
+.weather-stat__icon {
+  font-size: 12px;
+}
+
+/* Upcoming — subtle, tertiary emphasis */
+.widget--upcoming {
+  box-shadow: var(--shadow-card-subtle);
+  background: var(--surface-card-subtle);
+  border-color: var(--border-card-subtle);
+  transition:
+    background-color var(--transition-theme),
+    border-color     var(--transition-theme),
+    box-shadow       var(--transition-theme);
+}
+
+.upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.upcoming-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.upcoming-item__name {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  transition: color var(--transition-theme);
+}
+
+.upcoming-item__time {
+  font-size: 10px;
+  color: var(--text-faint);
+  transition: color var(--transition-theme);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   7. LAYER 3 — File Icons
+   ────────────────────────────────────────────────────────────── */
+.icons-layer {
+  position: absolute;
+  top: 44px;
+  right: 36px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  transition: opacity 260ms ease, transform 320ms ease;
+}
+
+.file-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: var(--radius-icon);
+  min-width: 80px;
+}
+
+.icon-glyph {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+}
+
+.icon-glyph svg {
+  display: block;
+  width: 36px;
+  height: 36px;
+}
+
+.icon-glyph--blue   { color: var(--icon-blue);   }
+.icon-glyph--yellow { color: var(--icon-yellow);  }
+.icon-glyph--green  { color: var(--icon-green);   }
+.icon-glyph--gray   { color: var(--icon-gray);    }
+.icon-glyph--teal   { color: var(--icon-teal);    }
+.icon-glyph--purple { color: var(--icon-purple);  }
+
+.icon-label {
+  font-size: 10px;
+  color: var(--text-faint);
+  opacity: 0.8;
+  text-align: center;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  transition: color var(--transition-theme);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   8. LAYER 4 — Dock
+   ────────────────────────────────────────────────────────────── */
+.dock {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  background: var(--surface-dock);
+  backdrop-filter: blur(var(--blur-dock));
+  -webkit-backdrop-filter: blur(var(--blur-dock));
+  border: 1px solid var(--border-dock);
+  border-radius: var(--radius-dock);
+  box-shadow: var(--shadow-dock);
+  opacity: 1;
+  transition:
+    opacity          260ms ease,
+    transform        320ms ease,
+    background-color var(--transition-theme),
+    border-color     var(--transition-theme),
+    border-radius    var(--transition-theme),
+    box-shadow       var(--transition-theme);
+}
+
+.dock__item {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-dock-item);
+  cursor: pointer;
+}
+
+.dock__icon {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+
+.dock__icon--blue    { color: var(--icon-blue);    }
+.dock__icon--red     { color: var(--icon-red);     }
+.dock__icon--orange  { color: var(--icon-orange);  }
+.dock__icon--pink    { color: var(--icon-pink);    }
+.dock__icon--green   { color: var(--icon-green);   }
+.dock__icon--cyan    { color: var(--icon-cyan);    }
+.dock__icon--emerald { color: var(--icon-emerald); }
+.dock__icon--gray    { color: var(--icon-gray);    }
+
+.dock__separator {
+  width: 1px;
+  height: 30px;
+  background: var(--border-divider);
+  margin: 0 4px;
+  transition: background-color var(--transition-theme);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   9. LAYER 5 — Theme Dialog
+   ────────────────────────────────────────────────────────────── */
+.theme-dialog {
+  position: absolute;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 7;
+  width: 348px;
+  background: var(--surface-dialog);
+  backdrop-filter: blur(var(--blur-dialog));
+  -webkit-backdrop-filter: blur(var(--blur-dialog));
+  border: 1px solid var(--border-dialog);
+  border-radius: var(--radius-dialog);
+  box-shadow: var(--shadow-dialog);
+  overflow: hidden;
+  opacity: 1;
+  transition:
+    opacity          260ms ease,
+    transform        320ms ease,
+    background-color var(--transition-theme),
+    border-color     var(--transition-theme),
+    border-radius    var(--transition-theme),
+    box-shadow       var(--transition-theme);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Preview + Apply Staging Hooks
+   Preview: subtle hints only (no full theme state)
+   Apply: staged progression by layer
+   ────────────────────────────────────────────────────────────── */
+#desktop.preview-active::before,
+#desktop.preview-active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease, background 220ms ease, box-shadow 220ms ease, filter 300ms ease, transform 360ms ease;
+}
+
+/* Hover tint / atmosphere veil */
+#desktop.preview-active::before {
+  z-index: 2;
+  mix-blend-mode: normal;
+}
+
+/* Hover hint particles / motes (very light, preview only) */
+#desktop.preview-active::after {
+  z-index: 2;
+  background-size: 100% 100%;
+  mix-blend-mode: screen;
+  animation: preview-hint-drift 13s ease-in-out infinite;
+}
+
+#desktop.preview-active .theme-dialog {
+  filter: saturate(1.08);
+}
+
+#desktop.preview-nature .wallpaper-layer {
+  filter: saturate(1.02) brightness(0.95) contrast(0.99) hue-rotate(-5deg);
+}
+
+#desktop.preview-nature::before {
+  opacity: 0.82;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(110, 150, 95, 0.08), transparent 56%),
+    linear-gradient(to bottom, rgba(55, 75, 45, 0.07), rgba(20, 28, 18, 0.10));
+  box-shadow:
+    inset 0 0 120px rgba(38, 52, 30, 0.12),
+    inset 0 -40px 90px rgba(25, 35, 20, 0.10);
+  filter: blur(0.8px);
+  backdrop-filter: saturate(0.92) brightness(0.96);
+  -webkit-backdrop-filter: saturate(0.92) brightness(0.96);
+}
+
+#desktop.preview-nature::after {
+  opacity: 0.30;
+  background-image:
+    radial-gradient(circle 1.5px at 14% 26%, rgba(126, 150, 108, 0.40) 0%, transparent 100%),
+    radial-gradient(circle 1.2px at 42% 58%, rgba(110, 138, 92, 0.35) 0%, transparent 100%),
+    radial-gradient(circle 1.6px at 70% 23%, rgba(134, 152, 106, 0.34) 0%, transparent 100%),
+    radial-gradient(circle 1.3px at 86% 68%, rgba(98, 128, 84, 0.34) 0%, transparent 100%),
+    radial-gradient(ellipse 120% 80% at 50% 100%, rgba(22, 28, 18, 0.16) 0%, transparent 68%),
+    repeating-linear-gradient(165deg, rgba(48, 86, 44, 0.05) 0 2px, transparent 2px 14px);
+  animation: preview-hint-drift 14s ease-in-out infinite;
+}
+
+#desktop.preview-divine .wallpaper-layer {
+  filter: saturate(1.10) brightness(1.14) contrast(1.02);
+}
+
+#desktop.preview-divine::before {
+  opacity: 0.92;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 230, 180, 0.18), transparent 52%),
+    radial-gradient(ellipse 55% 36% at 68% 36%, rgba(255, 246, 208, 0.22) 0%, transparent 70%),
+    linear-gradient(to bottom, rgba(255, 245, 220, 0.07), rgba(240, 220, 180, 0.10));
+  box-shadow: inset 0 0 140px rgba(255, 220, 160, 0.13);
+  filter: blur(1px);
+}
+
+#desktop.preview-divine::after {
+  opacity: 0.30;
+  background-image:
+    radial-gradient(circle 2px at 18% 22%, rgba(255, 240, 196, 0.48) 0%, transparent 100%),
+    radial-gradient(circle 1.7px at 40% 46%, rgba(255, 229, 162, 0.44) 0%, transparent 100%),
+    radial-gradient(circle 1.4px at 74% 30%, rgba(255, 247, 220, 0.42) 0%, transparent 100%),
+    radial-gradient(circle 1.8px at 84% 66%, rgba(242, 206, 136, 0.38) 0%, transparent 100%),
+    repeating-linear-gradient(112deg, rgba(255, 236, 188, 0.06) 0 2px, transparent 2px 24px);
+  animation: preview-hint-drift 15s ease-in-out infinite, preview-divine-bloom 7s ease-in-out infinite;
+}
+
+#desktop.preview-cyberpunk .wallpaper-layer {
+  filter: saturate(1.18) contrast(1.08) brightness(0.96) hue-rotate(9deg);
+}
+
+#desktop.preview-cyberpunk::before {
+  opacity: 0.16;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  filter: none;
+}
+
+#desktop.preview-cyberpunk::after {
+  opacity: 0.34;
+  background-image:
+    radial-gradient(circle at 50% 30%, rgba(0, 255, 220, 0.07), transparent 52%),
+    linear-gradient(to bottom, rgba(18, 10, 45, 0.08), rgba(0, 18, 38, 0.10)),
+    radial-gradient(circle 1.6px at 12% 24%, rgba(0, 236, 255, 0.42) 0%, transparent 100%),
+    radial-gradient(circle 1.2px at 36% 62%, rgba(255, 70, 164, 0.34) 0%, transparent 100%),
+    radial-gradient(circle 1.4px at 66% 28%, rgba(0, 214, 255, 0.38) 0%, transparent 100%),
+    radial-gradient(circle 1.2px at 88% 72%, rgba(255, 84, 176, 0.30) 0%, transparent 100%);
+  box-shadow:
+    inset 0 0 130px rgba(0, 255, 255, 0.09),
+    inset 0 -20px 80px rgba(70, 0, 120, 0.07);
+  backdrop-filter: saturate(1.06) contrast(1.02);
+  -webkit-backdrop-filter: saturate(1.06) contrast(1.02);
+  animation: preview-scan-shift 2.8s linear infinite;
+}
+
+#desktop.preview-active .wallpaper-layer {
+  transition: filter 260ms ease;
+}
+
+#desktop.preview-active .widgets-layer,
+#desktop.preview-active .icons-layer,
+#desktop.preview-active .dock {
+  filter: saturate(1.04);
+}
+
+/* Preview cues on UI objects (file stack + dock) */
+#desktop.preview-active .file-icon,
+#desktop.preview-active .dock,
+#desktop.preview-active .dock__item,
+#desktop.preview-active .dock__icon,
+#desktop.preview-active .widget-card,
+#desktop.preview-active .widget-label,
+#desktop.preview-active .widget-location,
+#desktop.preview-active .clock-time,
+#desktop.preview-active .clock-date,
+#desktop.preview-active .weather-temp,
+#desktop.preview-active .weather-desc,
+#desktop.preview-active .weather-stat,
+#desktop.preview-active .upcoming-item__name,
+#desktop.preview-active .upcoming-item__time,
+#desktop.preview-active .icon-glyph,
+#desktop.preview-active .icon-label {
+  transition: background-color 220ms ease, border-color 220ms ease, box-shadow 220ms ease, filter 240ms ease, color 220ms ease, opacity 220ms ease;
+}
+
+/* Nature preview widgets — muted earthy depth, mossy tone */
+#desktop.preview-nature .widget-card {
+  background: linear-gradient(to bottom, rgba(102, 118, 86, 0.34), rgba(58, 72, 46, 0.30));
+  border-color: rgba(92, 116, 76, 0.32);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(160, 184, 140, 0.12),
+    inset 0 -14px 30px rgba(14, 20, 10, 0.22),
+    0 0 16px rgba(62, 92, 52, 0.12);
+}
+
+#desktop.preview-nature .widget-label,
+#desktop.preview-nature .widget-location,
+#desktop.preview-nature .clock-date,
+#desktop.preview-nature .weather-desc,
+#desktop.preview-nature .weather-stat,
+#desktop.preview-nature .upcoming-item__name,
+#desktop.preview-nature .upcoming-item__time {
+  color: rgba(194, 206, 178, 0.86);
+}
+
+#desktop.preview-nature .clock-time,
+#desktop.preview-nature .weather-temp {
+  color: rgba(214, 224, 198, 0.90);
+  text-shadow: 0 1px 4px rgba(12, 18, 10, 0.28);
+}
+
+/* Divine preview widgets — luminous ivory/gold bloom */
+#desktop.preview-divine .widget-card {
+  background: linear-gradient(to bottom, rgba(255, 247, 222, 0.42), rgba(236, 210, 150, 0.24));
+  border-color: rgba(214, 184, 102, 0.36);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(255, 252, 234, 0.62),
+    0 0 20px rgba(255, 226, 160, 0.18);
+}
+
+#desktop.preview-divine .widget-label,
+#desktop.preview-divine .widget-location,
+#desktop.preview-divine .clock-date,
+#desktop.preview-divine .weather-desc,
+#desktop.preview-divine .weather-stat,
+#desktop.preview-divine .upcoming-item__name,
+#desktop.preview-divine .upcoming-item__time {
+  color: rgba(236, 220, 180, 0.92);
+}
+
+#desktop.preview-divine .clock-time,
+#desktop.preview-divine .weather-temp {
+  color: rgba(255, 242, 208, 0.96);
+  text-shadow: 0 1px 6px rgba(160, 122, 48, 0.22);
+}
+
+/* Cyberpunk preview widgets — darker glass + faint neon edge */
+#desktop.preview-cyberpunk .widget-card {
+  background:
+    linear-gradient(to bottom, rgba(14, 20, 46, 0.52), rgba(6, 12, 30, 0.58)),
+    repeating-linear-gradient(to bottom, rgba(0, 255, 255, 0.03) 0 1px, transparent 1px 4px);
+  border-color: rgba(0, 220, 255, 0.36);
+  box-shadow:
+    var(--shadow-card),
+    0 0 16px rgba(0, 220, 255, 0.14),
+    0 0 24px rgba(255, 0, 180, 0.07),
+    inset 0 1px 0 rgba(108, 232, 255, 0.14);
+}
+
+#desktop.preview-cyberpunk .widget-label,
+#desktop.preview-cyberpunk .widget-location,
+#desktop.preview-cyberpunk .clock-date,
+#desktop.preview-cyberpunk .weather-desc,
+#desktop.preview-cyberpunk .weather-stat,
+#desktop.preview-cyberpunk .upcoming-item__name,
+#desktop.preview-cyberpunk .upcoming-item__time {
+  color: rgba(176, 224, 236, 0.90);
+}
+
+#desktop.preview-cyberpunk .clock-time,
+#desktop.preview-cyberpunk .weather-temp {
+  color: rgba(196, 246, 255, 0.95);
+  text-shadow: 0 0 8px rgba(0, 220, 255, 0.18);
+}
+
+/* Nature preview — earthy, mossy, slightly darker depth */
+#desktop.preview-nature .file-icon {
+  background: linear-gradient(to bottom, rgba(68, 86, 58, 0.24), rgba(30, 42, 24, 0.26));
+  box-shadow:
+    0 0 0 1px rgba(92, 122, 78, 0.26),
+    inset 0 1px 0 rgba(162, 184, 140, 0.10),
+    inset 0 -10px 24px rgba(16, 22, 12, 0.18);
+}
+
+#desktop.preview-nature .icon-glyph {
+  filter: saturate(0.72) brightness(0.84) sepia(0.16);
+  opacity: 0.82;
+}
+
+#desktop.preview-nature .icon-label {
+  color: rgba(205, 214, 184, 0.90);
+  text-shadow: 0 1px 3px rgba(12, 18, 10, 0.62);
+}
+
+#desktop.preview-nature .dock {
+  background: linear-gradient(to bottom, rgba(42, 52, 36, 0.74), rgba(24, 32, 20, 0.82));
+  border-color: rgba(96, 124, 82, 0.34);
+  box-shadow:
+    var(--shadow-dock),
+    inset 0 1px 0 rgba(160, 184, 142, 0.10),
+    inset 0 -12px 30px rgba(12, 18, 10, 0.24),
+    0 0 18px rgba(72, 102, 62, 0.14);
+}
+
+#desktop.preview-nature .dock__item {
+  background: rgba(88, 116, 76, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(102, 132, 86, 0.20);
+}
+
+#desktop.preview-nature .dock__icon {
+  filter: saturate(0.80) brightness(0.88) sepia(0.12);
+}
+
+/* Divine preview — ivory/gold glow, luminous and clean */
+#desktop.preview-divine .file-icon {
+  background: linear-gradient(to bottom, rgba(255, 248, 224, 0.26), rgba(232, 206, 146, 0.18));
+  box-shadow:
+    0 0 0 1px rgba(210, 178, 92, 0.30),
+    inset 0 1px 0 rgba(255, 250, 232, 0.52),
+    0 0 20px rgba(255, 220, 150, 0.14);
+}
+
+#desktop.preview-divine .icon-glyph {
+  filter: saturate(0.92) brightness(1.04) sepia(0.10);
+  opacity: 0.90;
+}
+
+#desktop.preview-divine .icon-label {
+  color: rgba(255, 244, 216, 0.94);
+  text-shadow: 0 1px 4px rgba(124, 92, 34, 0.46);
+}
+
+#desktop.preview-divine .dock {
+  background: linear-gradient(to bottom, rgba(250, 238, 206, 0.62), rgba(232, 206, 146, 0.40));
+  border-color: rgba(210, 178, 92, 0.42);
+  box-shadow:
+    var(--shadow-dock),
+    inset 0 1px 0 rgba(255, 250, 234, 0.54),
+    0 0 24px rgba(255, 220, 150, 0.18);
+}
+
+#desktop.preview-divine .dock__item {
+  background: rgba(248, 228, 178, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(218, 188, 108, 0.26);
+}
+
+#desktop.preview-divine .dock__icon {
+  filter: saturate(0.96) brightness(1.05);
+}
+
+/* Cyberpunk preview — darker glass, neon edge, faint digital feel */
+#desktop.preview-cyberpunk .file-icon {
+  background: linear-gradient(to bottom, rgba(14, 22, 46, 0.42), rgba(6, 14, 34, 0.54));
+  box-shadow:
+    0 0 0 1px rgba(0, 236, 255, 0.34),
+    0 0 14px rgba(0, 220, 255, 0.14),
+    0 0 22px rgba(255, 0, 180, 0.08),
+    inset 0 1px 0 rgba(96, 226, 255, 0.12);
+}
+
+#desktop.preview-cyberpunk .icon-glyph {
+  filter: saturate(1.12) brightness(0.98) contrast(1.06) drop-shadow(0 0 5px rgba(0, 220, 255, 0.20));
+  opacity: 0.90;
+}
+
+#desktop.preview-cyberpunk .icon-label {
+  color: rgba(198, 248, 255, 0.92);
+  text-shadow: 0 0 7px rgba(0, 210, 255, 0.24), 0 1px 3px rgba(6, 12, 22, 0.62);
+}
+
+#desktop.preview-cyberpunk .dock {
+  background:
+    linear-gradient(to bottom, rgba(12, 18, 40, 0.72), rgba(4, 12, 30, 0.82)),
+    repeating-linear-gradient(to bottom, rgba(0, 255, 255, 0.04) 0 1px, transparent 1px 3px);
+  border-color: rgba(0, 220, 255, 0.44);
+  box-shadow:
+    var(--shadow-dock),
+    0 0 20px rgba(0, 220, 255, 0.16),
+    0 0 30px rgba(255, 0, 180, 0.09),
+    inset 0 1px 0 rgba(102, 236, 255, 0.16);
+}
+
+#desktop.preview-cyberpunk .dock__item {
+  background: rgba(0, 216, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(0, 220, 255, 0.26);
+}
+
+#desktop.preview-cyberpunk .dock__icon {
+  filter: saturate(1.16) brightness(1.04) drop-shadow(0 0 5px rgba(0, 220, 255, 0.22));
+}
+
+#desktop.preview-nature .theme-dialog {
+  box-shadow: 0 0 0 1px rgba(120, 155, 105, 0.30), 0 10px 26px rgba(35, 50, 28, 0.16), var(--shadow-dialog);
+}
+
+#desktop.preview-divine .theme-dialog {
+  box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.36), 0 0 30px rgba(255, 220, 140, 0.22), var(--shadow-dialog);
+}
+
+#desktop.preview-cyberpunk .theme-dialog {
+  box-shadow: 0 0 0 1px rgba(0, 255, 255, 0.40), 0 0 20px rgba(0, 255, 255, 0.12), 0 0 30px rgba(255, 0, 180, 0.07), var(--shadow-dialog);
+}
+
+#desktop.preview-nature .theme-tab[data-theme='nature'] {
+  box-shadow:
+    0 0 0 1px rgba(120, 155, 105, 0.35),
+    0 8px 22px rgba(35, 50, 28, 0.18),
+    inset 0 1px 0 rgba(180, 220, 170, 0.12);
+}
+
+#desktop.preview-divine .theme-tab[data-theme='divine'] {
+  box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.42), 0 0 16px rgba(255, 220, 140, 0.26);
+}
+
+#desktop.preview-cyberpunk .theme-tab[data-theme='cyberpunk'] {
+  box-shadow:
+    0 0 0 1px rgba(0, 255, 255, 0.45),
+    0 0 18px rgba(0, 255, 255, 0.12),
+    0 0 28px rgba(255, 0, 180, 0.06);
+}
+
+#desktop.is-applying .wallpaper-layer {
+  filter: saturate(0.95) brightness(0.94);
+}
+
+#desktop.is-applying .widgets-layer,
+#desktop.is-applying .icons-layer {
+  opacity: 0.68;
+  transform: translateY(5px);
+}
+
+#desktop.is-applying .dock,
+#desktop.is-applying .theme-dialog {
+  opacity: 0.70;
+  transform: translate(-50%, 5px);
+}
+
+#desktop.is-applying.apply-stage-bg .wallpaper-layer {
+  filter: none;
+}
+
+#desktop.is-applying.apply-stage-frame {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), inset 0 0 70px rgba(255, 255, 255, 0.07);
+}
+
+#desktop.is-applying.apply-stage-widgets .dock {
+  transform: translateX(-50%);
+}
+
+#desktop.is-applying.apply-stage-widgets .theme-dialog {
+  transform: translateX(-50%);
+}
+
+#desktop.is-applying.apply-stage-widgets .widgets-layer,
+#desktop.is-applying.apply-stage-widgets .icons-layer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#desktop.is-applying.apply-stage-widgets .dock,
+#desktop.is-applying.apply-stage-widgets .theme-dialog {
+  opacity: 1;
+}
+
+#desktop .nature-particles,
+#desktop .divine-particles,
+#desktop .cyberpunk-particles {
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+#desktop.is-applying.apply-stage-particles .nature-particles,
+#desktop.is-applying.apply-stage-particles .divine-particles,
+#desktop.is-applying.apply-stage-particles .cyberpunk-particles {
+  opacity: 0.78;
+}
+
+#desktop:not(.is-applying) .nature-particles,
+#desktop:not(.is-applying) .divine-particles,
+#desktop:not(.is-applying) .cyberpunk-particles {
+  opacity: 1;
+}
+
+/* Ambient motion resumes only in the final stage. */
+#desktop.is-applying,
+#desktop.is-applying *,
+#desktop.is-applying *::before,
+#desktop.is-applying *::after {
+  animation-play-state: paused;
+}
+
+#desktop.is-applying.apply-stage-ambient,
+#desktop.is-applying.apply-stage-ambient *,
+#desktop.is-applying.apply-stage-ambient *::before,
+#desktop.is-applying.apply-stage-ambient *::after {
+  animation-play-state: running;
+}
+
+#desktop.is-applying::before,
+#desktop.is-applying::after {
+  opacity: 0;
+  animation: none;
+}
+
+/* Apply-start confirmation: brief pulse + restrained sweep. */
+#desktop.is-applying.apply-start::before,
+#desktop.is-applying.apply-start::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+}
+
+#desktop.is-applying.apply-start::before {
+  background:
+    radial-gradient(ellipse 62% 44% at 50% 34%, rgba(255, 255, 255, 0.22) 0%, transparent 64%),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.03) 100%);
+  animation: apply-commit-pulse 340ms ease-out forwards;
+}
+
+#desktop.is-applying.apply-start::after {
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 48%,
+    rgba(255, 255, 255, 0.12) 55%,
+    transparent 72%
+  );
+  transform: translateX(-55%);
+  animation: apply-commit-sweep 360ms ease-out forwards;
+}
+
+@keyframes preview-hint-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-6px, 4px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes preview-divine-bloom {
+  0%, 100% {
+    opacity: 0.26;
+  }
+  50% {
+    opacity: 0.34;
+  }
+}
+
+@keyframes preview-scan-shift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, 4px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes apply-commit-pulse {
+  0% { opacity: 0; }
+  18% { opacity: 0.42; }
+  100% { opacity: 0; }
+}
+
+@keyframes apply-commit-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-55%);
+  }
+  18% {
+    opacity: 0.42;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(55%);
+  }
+}
+
+/* Titlebar */
+.dialog-titlebar {
+  display: flex;
+  align-items: center;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border-divider);
+  gap: 10px;
+  transition: border-color var(--transition-theme);
+}
+
+.traffic-lights {
+  display: flex;
+  gap: 6px;
+}
+
+.tl-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tl--close  { background: var(--tl-close);  }
+.tl--min    { background: var(--tl-min);    }
+.tl--expand { background: var(--tl-expand); }
+
+.dialog-title-text {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+  transition: color var(--transition-theme);
+}
+
+.dialog-titlebar__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dialog-action {
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+  transition: color var(--transition-theme);
+}
+
+/* Body */
+.dialog-body {
+  padding: 18px;
+}
+
+.theme-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.theme-tab {
+  padding: 12px 0;
+  background: var(--surface-tab);
+  border: 1px solid var(--border-tab);
+  border-radius: var(--radius-tab);
+  font-family: var(--font-system);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  letter-spacing: 0.02em;
+  transition:
+    background-color var(--transition-theme),
+    border-color     var(--transition-theme),
+    border-radius    var(--transition-theme),
+    color            var(--transition-theme);
+}

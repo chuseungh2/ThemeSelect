@@ -1,0 +1,762 @@
+/* ================================================================
+   theme-nature.css
+   All styling scoped to .theme-nature (Overgrown Ruins).
+
+   Every UI element is physically integrated into an abandoned
+   overgrown structure — broken concrete, aged stone, organic
+   overgrowth, drifting fog. Nothing looks modern or digital.
+
+   Sections:
+   10.0  Keyframe animations
+   10.1  Wallpaper — background image, grain, fog layers
+   10.2  Widget cards — stone surface, moss/vine overlays, cracks
+   10.3  Clock text
+   10.4  Theme dialog
+   10.5  File icons
+   10.6  Dock
+   10.7  Hover / interaction states
+   ================================================================ */
+
+/* ── 10.0 Keyframe animations ───────────────────────────────── */
+
+@keyframes nature-spore-drift {
+  0%   { transform: translate(0, 0);          opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translate(-60px, -120px); opacity: 0; }
+}
+
+@keyframes nature-spore-drift-2 {
+  0%   { transform: translate(0, 0);         opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translate(40px, -100px); opacity: 0; }
+}
+
+/* Rooted plant sway — gentle stir, like a slow exhale of wind */
+@keyframes nature-plant-sway {
+  0%,  100% { transform: translateX(0px)   rotate(0deg);    }
+  22%        { transform: translateX(3px)   rotate(0.8deg);  }
+  55%        { transform: translateX(-2px)  rotate(-0.6deg); }
+  78%        { transform: translateX(1.5px) rotate(0.4deg);  }
+}
+
+/* Hanging vine sway — freer at the tips, more arc to the motion */
+@keyframes nature-vine-sway {
+  0%,  100% { transform: translateX(0px)   rotate(0deg);    }
+  20%        { transform: translateX(4px)   rotate(1.2deg);  }
+  50%        { transform: translateX(-3px)  rotate(-0.9deg); }
+  75%        { transform: translateX(2px)   rotate(0.6deg);  }
+}
+
+/* Leaf flutter — quick, irregular micro-shiver */
+@keyframes nature-leaf-flutter {
+  0%,  100% { transform: rotate(0deg)    skewX(0deg);     }
+  12%        { transform: rotate(0.8deg)  skewX(0.25deg);  }
+  38%        { transform: rotate(-0.6deg) skewX(-0.15deg); }
+  62%        { transform: rotate(0.9deg)  skewX(0.30deg);  }
+  84%        { transform: rotate(-0.4deg) skewX(-0.10deg); }
+}
+
+/* Fog drift — slow atmospheric bloom from the bright center.
+   Horizontal and slight vertical drift combined so it never
+   feels locked in place. Blur added in the element rule. */
+@keyframes nature-fog-drift {
+  0%   { transform: translateX(-6%)  translateY(0%)    scaleX(1.00); opacity: 0.22; }
+  30%  { transform: translateX(0%)   translateY(-1.5%) scaleX(1.03); opacity: 0.32; }
+  65%  { transform: translateX(4%)   translateY(0.8%)  scaleX(1.07); opacity: 0.26; }
+  100% { transform: translateX(-6%)  translateY(0%)    scaleX(1.00); opacity: 0.22; }
+}
+
+@keyframes nature-fog-drift-2 {
+  0%   { transform: translateX(5%)  translateY(0%)    scaleX(1.00); opacity: 0.12; }
+  40%  { transform: translateX(0%)  translateY(1.2%)  scaleX(1.03); opacity: 0.20; }
+  70%  { transform: translateX(-4%) translateY(-0.5%) scaleX(1.05); opacity: 0.16; }
+  100% { transform: translateX(5%)  translateY(0%)    scaleX(1.00); opacity: 0.12; }
+}
+
+/* Third fog wisp — deep lower canopy haze, very slow */
+@keyframes nature-fog-drift-3 {
+  0%   { transform: translateX(0%)   translateY(0%)   scaleX(1.00); opacity: 0.08; }
+  50%  { transform: translateX(-3%)  translateY(1%)   scaleX(1.04); opacity: 0.14; }
+  100% { transform: translateX(0%)   translateY(0%)   scaleX(1.00); opacity: 0.08; }
+}
+
+/* ── 10.1 Wallpaper ─────────────────────────────────────────── */
+
+/* Real photo replaces the CSS gradient */
+.theme-nature .wallpaper--base {
+  background-image: url('../assets/bg-nature.jpg');
+}
+
+/* Heavier grain than default */
+.theme-nature .wallpaper--base::after {
+  opacity: 0.12;
+}
+
+/* CSS-only floating spore particles */
+.theme-nature .wallpaper--base::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image:
+    radial-gradient(circle 2px   at 15% 30%, rgba(140,160,100,0.35) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 45% 60%, rgba(120,140,80,0.30)  0%, transparent 100%),
+    radial-gradient(circle 2.5px at 70% 20%, rgba(160,150,110,0.25) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 85% 75%, rgba(130,150,90,0.28)  0%, transparent 100%),
+    radial-gradient(circle 2px   at 30% 85%, rgba(150,140,100,0.22) 0%, transparent 100%),
+    radial-gradient(circle 1px   at 60% 45%, rgba(140,160,100,0.32) 0%, transparent 100%);
+  animation: nature-spore-drift 20s linear infinite;
+}
+
+/* Primary fog — wide green-tinted haze drifting through the canopy.
+   Blur turns the gradient into visible mist rather than a tint. */
+.theme-nature .wallpaper-layer::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 45% at 50% 32%,
+    rgba(165, 205, 145, 0.38) 0%,
+    rgba(148, 188, 128, 0.18) 52%,
+    transparent 100%
+  );
+  filter: blur(22px);
+  animation: nature-fog-drift 38s ease-in-out infinite;
+}
+
+/* Secondary fog — thinner wisp at upper canopy, offset rhythm */
+.theme-nature .wallpaper-layer::after {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 58% 32% at 58% 22%,
+    rgba(195, 220, 170, 0.28) 0%,
+    transparent 100%
+  );
+  filter: blur(14px);
+  animation: nature-fog-drift-2 26s ease-in-out 11s infinite;
+}
+
+/* Third fog layer — low canopy ground haze, very slow and subtle */
+.theme-nature #desktop::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 28% at 50% 78%,
+    rgba(140, 180, 120, 0.20) 0%,
+    rgba(120, 160, 100, 0.08) 60%,
+    transparent 100%
+  );
+  filter: blur(28px);
+  animation: nature-fog-drift-3 52s ease-in-out 7s infinite;
+}
+
+/* ── 10.2 Widget cards — broken stone/concrete fragments ──────── */
+
+/* Mottled stone surface — opaque, uneven, physically heavy */
+.theme-nature .widget-card {
+  position: relative;
+  overflow: visible;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-width: 2px;
+  background-image:
+    linear-gradient(
+      165deg,
+      rgba(185, 180, 158, 0.40) 0%,
+      rgba(168, 164, 142, 0.15) 18%,
+      rgba(155, 148, 125, 0.08) 32%,
+      rgba(140, 132, 108, 0.20) 48%,
+      rgba(130, 125, 100, 0.12) 62%,
+      rgba(120, 112, 88, 0.30) 78%,
+      rgba(105, 98, 75, 0.38) 100%
+    );
+  box-shadow:
+    var(--shadow-card),
+    0 0 18px rgba(62, 108, 58, 0.10),
+    inset 0 2px 0    rgba(195, 190, 168, 0.55),
+    inset 0 -5px 18px rgba(20, 15, 5, 0.30),
+    inset 4px 0 10px rgba(20, 15, 5, 0.12),
+    inset -4px 0 10px rgba(20, 15, 5, 0.10);
+}
+
+/* Clock — heaviest slab, most cracked and mossy */
+.theme-nature .widget--clock {
+  border-radius: 4px 2px 6px 3px;
+  transform: rotate(-0.3deg);
+  box-shadow:
+    var(--shadow-card-elevated),
+    0 0 24px rgba(62, 108, 58, 0.13),
+    inset 0 2px 0    rgba(195, 190, 168, 0.60),
+    inset 0 -6px 22px rgba(20, 15, 5, 0.35),
+    inset 4px 0 12px rgba(20, 15, 5, 0.14),
+    inset -4px 0 12px rgba(20, 15, 5, 0.12);
+}
+
+/* Weather — mid-weight fragment */
+.theme-nature .widget--weather {
+  border-radius: 3px 5px 2px 4px;
+  transform: rotate(0.4deg);
+}
+
+/* Upcoming — most recessed, sunken into the wall */
+.theme-nature .widget--upcoming {
+  border-radius: 5px 3px 4px 2px;
+  transform: rotate(-0.5deg);
+  box-shadow:
+    var(--shadow-card-subtle),
+    inset 0 2px 0    rgba(185, 180, 158, 0.40),
+    inset 0 -4px 18px rgba(20, 15, 5, 0.25),
+    inset 0 0 24px   rgba(20, 15, 5, 0.12);
+}
+
+/* ── 10.2b Moss/vine overlays (::before on each widget) ───────── */
+
+/* Clock — heavy moss top-left + bottom-right, vine stripe left edge */
+.theme-nature .widget--clock::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-card);
+  background-image:
+    radial-gradient(ellipse 65px 50px at 0% 0%,
+      rgba(58, 100, 52, 0.55) 0%, rgba(48, 88, 42, 0.25) 50%, transparent 100%),
+    radial-gradient(ellipse 55px 45px at 100% 100%,
+      rgba(52, 92, 46, 0.45) 0%, rgba(42, 82, 38, 0.18) 55%, transparent 100%),
+    radial-gradient(ellipse 14px 80px at 0% 55%,
+      rgba(64, 110, 58, 0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 28px 22px at 92% 40%,
+      rgba(56, 96, 50, 0.28) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 130' preserveAspectRatio='none'%3E%3Cpath d='M 0,8 C 12,6 22,10 30,18 C 38,26 35,38 28,42' stroke='%23385C32' stroke-width='1.2' fill='none' stroke-opacity='0.40' stroke-linecap='round'/%3E%3Cellipse cx='18' cy='12' rx='4' ry='3' fill='%233A6834' fill-opacity='0.30'/%3E%3Cellipse cx='32' cy='30' rx='3' ry='5' fill='%233A6834' fill-opacity='0.25'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 3;
+  /* Vine animation — rooted at top-left, tips hang and drift */
+  transform-origin: 0% 0%;
+  animation: nature-vine-sway 13s ease-in-out infinite;
+}
+
+/* Weather — moss along bottom edge + top-right corner */
+.theme-nature .widget--weather::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-card);
+  background-image:
+    radial-gradient(ellipse 120px 30px at 40% 105%,
+      rgba(54, 96, 48, 0.50) 0%, rgba(44, 82, 40, 0.20) 55%, transparent 100%),
+    radial-gradient(ellipse 48px 40px at 100% 0%,
+      rgba(58, 100, 52, 0.45) 0%, rgba(48, 88, 42, 0.18) 55%, transparent 100%),
+    radial-gradient(ellipse 32px 26px at 5% 95%,
+      rgba(52, 92, 46, 0.35) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 150' preserveAspectRatio='none'%3E%3Cpath d='M 80,150 C 78,138 85,128 82,118 C 79,108 72,104 75,96' stroke='%23385C32' stroke-width='1' fill='none' stroke-opacity='0.35' stroke-linecap='round'/%3E%3Cellipse cx='77' cy='110' rx='3' ry='4' fill='%233A6834' fill-opacity='0.22'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 3;
+  /* Vine animation — rooted at bottom, sways upward */
+  transform-origin: 50% 100%;
+  animation: nature-plant-sway 17s ease-in-out 3.5s infinite;
+}
+
+/* Upcoming — moss in top corners, vine down left edge */
+.theme-nature .widget--upcoming::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-card);
+  background-image:
+    radial-gradient(ellipse 50px 38px at 0% 0%,
+      rgba(56, 98, 50, 0.48) 0%, rgba(46, 86, 40, 0.20) 55%, transparent 100%),
+    radial-gradient(ellipse 42px 35px at 100% 0%,
+      rgba(52, 92, 46, 0.42) 0%, rgba(42, 80, 38, 0.16) 55%, transparent 100%),
+    radial-gradient(ellipse 12px 70px at 0% 50%,
+      rgba(60, 108, 54, 0.30) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 115' preserveAspectRatio='none'%3E%3Cpath d='M 0,20 C 8,28 6,40 3,52 C 0,64 5,78 2,90' stroke='%23385C32' stroke-width='1' fill='none' stroke-opacity='0.32' stroke-linecap='round'/%3E%3Cellipse cx='4' cy='45' rx='4' ry='3' fill='%233A6834' fill-opacity='0.22'/%3E%3Cellipse cx='3' cy='75' rx='3' ry='4' fill='%233A6834' fill-opacity='0.20'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 3;
+  /* Vine animation — runs down left edge, gentle stir */
+  transform-origin: 0% 0%;
+  animation: nature-plant-sway 21s ease-in-out 8s infinite;
+}
+
+/* ── 10.2c Crack overlays (::after on each widget) ────────────── */
+
+/* Clock — major vertical crack from top-center, 2 branches */
+.theme-nature .widget--clock::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+  background-image:
+    radial-gradient(ellipse 52px 40px at 66% 0%,
+      rgba(42, 92, 48, 0.60) 0%, rgba(42, 92, 48, 0.25) 50%, transparent 100%),
+    radial-gradient(ellipse 26px 20px at 56% 18%,
+      rgba(60, 112, 64, 0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 18px 16px at 62% 55%,
+      rgba(55, 105, 58, 0.22) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 130' preserveAspectRatio='none'%3E%3Cpath d='M 145,0 L 143,8 L 140,16 L 144,22 L 149,30 L 144,40 L 136,52 L 138,62 L 141,78 L 140,90 L 138,105 L 139,115 L 142,130' stroke='%23060200' stroke-width='7' fill='none' stroke-opacity='0.13' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 145,0 L 143,8 L 140,16 L 144,22 L 149,30 L 144,40 L 136,52 L 138,62 L 141,78 L 140,90 L 138,105 L 139,115 L 142,130' stroke='%23180e02' stroke-width='1.8' fill='none' stroke-opacity='0.82' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 146,0 L 144,8 L 141,16 L 145,22 L 150,30 L 145,40 L 137,52 L 139,62 L 142,78 L 141,90 L 139,105 L 140,115 L 143,130' stroke='%23d8c89a' stroke-width='0.6' fill='none' stroke-opacity='0.15' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 140,30 L 132,38 L 125,46 L 120,56 L 118,65 M 136,52 L 146,62 L 155,70 L 158,80 L 160,88 M 141,78 L 134,86 L 128,92' stroke='%23060200' stroke-width='4' fill='none' stroke-opacity='0.08' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 140,30 L 132,38 L 125,46 L 120,56 L 118,65 M 136,52 L 146,62 L 155,70 L 158,80 L 160,88 M 141,78 L 134,86 L 128,92' stroke='%23180e02' stroke-width='1.2' fill='none' stroke-opacity='0.48' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 80,0 L 79,6 L 78,12 L 82,18 L 85,22 L 83,28 L 82,35 M 200,45 L 195,49 L 192,52 L 194,57 L 195,62' stroke='%23180e02' stroke-width='0.8' fill='none' stroke-opacity='0.28' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 30,110 L 38,109 L 45,108 L 52,112 L 58,115 M 170,10 L 172,16 L 175,22 M 10,60 L 14,59 L 18,58' stroke='%23180e02' stroke-width='0.5' fill='none' stroke-opacity='0.18' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  mask-image: radial-gradient(ellipse 55% 60% at 50% 50%, transparent 25%, black 80%);
+  -webkit-mask-image: radial-gradient(ellipse 55% 60% at 50% 50%, transparent 25%, black 80%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Weather — horizontal crack from left, branches downward */
+.theme-nature .widget--weather::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+  background-image:
+    radial-gradient(ellipse 42px 34px at 0% 48%,
+      rgba(42, 92, 48, 0.58) 0%, rgba(42, 92, 48, 0.22) 50%, transparent 100%),
+    radial-gradient(ellipse 20px 28px at 10% 58%,
+      rgba(60, 112, 64, 0.30) 0%, transparent 100%),
+    radial-gradient(ellipse 16px 14px at 42% 46%,
+      rgba(55, 105, 58, 0.20) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 150' preserveAspectRatio='none'%3E%3Cpath d='M 0,72 L 12,70 L 24,68 L 34,74 L 42,78 L 52,70 L 60,64 L 78,68 L 95,70 L 110,63 L 125,60 L 142,64 L 158,66' stroke='%23060200' stroke-width='7' fill='none' stroke-opacity='0.13' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 0,72 L 12,70 L 24,68 L 34,74 L 42,78 L 52,70 L 60,64 L 78,68 L 95,70 L 110,63 L 125,60 L 142,64 L 158,66' stroke='%23180e02' stroke-width='1.8' fill='none' stroke-opacity='0.82' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 0,71 L 12,69 L 24,67 L 34,73 L 42,77 L 52,69 L 60,63 L 78,67 L 95,69 L 110,62 L 125,59 L 142,63 L 158,65' stroke='%23d8c89a' stroke-width='0.6' fill='none' stroke-opacity='0.14' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 42,78 L 36,88 L 32,96 L 34,106 L 36,115 L 32,125 L 30,135 M 60,64 L 55,73 L 52,82 L 54,90 L 56,98 M 125,60 L 129,52 L 132,48 L 130,41 L 128,35' stroke='%23060200' stroke-width='4' fill='none' stroke-opacity='0.08' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 42,78 L 36,88 L 32,96 L 34,106 L 36,115 L 32,125 L 30,135 M 60,64 L 55,73 L 52,82 L 54,90 L 56,98 M 125,60 L 129,52 L 132,48 L 130,41 L 128,35' stroke='%23180e02' stroke-width='1.2' fill='none' stroke-opacity='0.48' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 160,120 L 165,115 L 168,112 L 172,115 L 175,118 L 180,114 L 185,110 M 180,0 L 178,8 L 176,15 L 179,22 L 182,28' stroke='%23180e02' stroke-width='0.8' fill='none' stroke-opacity='0.28' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 95,130 L 97,136 L 100,142 M 20,20 L 24,23 L 28,25 M 200,80 L 205,79 L 210,78' stroke='%23180e02' stroke-width='0.5' fill='none' stroke-opacity='0.18' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  mask-image: radial-gradient(ellipse 55% 60% at 50% 50%, transparent 25%, black 80%);
+  -webkit-mask-image: radial-gradient(ellipse 55% 60% at 50% 50%, transparent 25%, black 80%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Upcoming — diagonal crack from top-right to bottom-left */
+.theme-nature .widget--upcoming::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+  background-image:
+    radial-gradient(ellipse 48px 36px at 83% 0%,
+      rgba(42, 92, 48, 0.55) 0%, rgba(42, 92, 48, 0.22) 50%, transparent 100%),
+    radial-gradient(ellipse 22px 18px at 72% 18%,
+      rgba(60, 112, 64, 0.30) 0%, transparent 100%),
+    radial-gradient(ellipse 16px 20px at 60% 55%,
+      rgba(55, 105, 58, 0.20) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 115' preserveAspectRatio='none'%3E%3Cpath d='M 182,0 L 178,9 L 174,18 L 170,25 L 165,32 L 155,43 L 148,52 L 140,60 L 130,68 L 121,75 L 112,82 L 104,91 L 95,100 L 88,108 L 80,115' stroke='%23060200' stroke-width='7' fill='none' stroke-opacity='0.13' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 182,0 L 178,9 L 174,18 L 170,25 L 165,32 L 155,43 L 148,52 L 140,60 L 130,68 L 121,75 L 112,82 L 104,91 L 95,100 L 88,108 L 80,115' stroke='%23180e02' stroke-width='1.8' fill='none' stroke-opacity='0.82' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 183,0 L 179,9 L 175,18 L 171,25 L 166,32 L 156,43 L 149,52 L 141,60 L 131,68 L 122,75 L 113,82 L 105,91 L 96,100 L 89,108 L 81,115' stroke='%23d8c89a' stroke-width='0.6' fill='none' stroke-opacity='0.14' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 165,32 L 157,30 L 152,28 L 145,32 L 140,35 M 148,52 L 155,59 L 160,65 L 163,73 L 165,80 M 130,68 L 122,65 L 118,62 L 113,65 L 108,68' stroke='%23060200' stroke-width='4' fill='none' stroke-opacity='0.08' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 165,32 L 157,30 L 152,28 L 145,32 L 140,35 M 148,52 L 155,59 L 160,65 L 163,73 L 165,80 M 130,68 L 122,65 L 118,62 L 113,65 L 108,68' stroke='%23180e02' stroke-width='1.2' fill='none' stroke-opacity='0.48' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 40,0 L 39,7 L 38,14 L 41,20 L 44,26 M 210,70 L 207,76 L 205,82 L 207,87 L 210,92' stroke='%23180e02' stroke-width='0.8' fill='none' stroke-opacity='0.28' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 15,80 L 18,83 L 22,85 M 190,20 L 192,24 L 195,28 M 60,50 L 57,54 L 55,58' stroke='%23180e02' stroke-width='0.5' fill='none' stroke-opacity='0.18' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  mask-image: radial-gradient(ellipse 55% 60% at 50% 50%, transparent 25%, black 80%);
+  -webkit-mask-image: radial-gradient(ellipse 55% 60% at 50% 50%, transparent 25%, black 80%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── 10.3 Clock text — deeply carved stone ──────────────────── */
+
+.theme-nature .clock-time {
+  text-shadow:
+    0 -1px 1px rgba(20, 15, 5, 0.45),
+    0 2px 0   rgba(195, 190, 168, 0.55),
+    0 3px 8px rgba(20, 15, 5, 0.25),
+    0 0 12px  rgba(74, 124, 89, 0.12);
+}
+
+/* ── 10.4 Theme dialog — broken embedded control panel ───────── */
+
+.theme-nature .theme-dialog {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-width: 2px;
+  border-radius: 4px 3px 5px 2px;
+  box-shadow:
+    var(--shadow-dialog),
+    0 0 30px rgba(58, 100, 52, 0.12),
+    inset 0 2px 0    rgba(185, 180, 158, 0.50),
+    inset 0 -4px 16px rgba(20, 15, 5, 0.28),
+    inset 4px 0 10px rgba(20, 15, 5, 0.10),
+    inset -4px 0 10px rgba(20, 15, 5, 0.08);
+}
+
+/* Inner atmospheric decay — moisture staining, dirty inset glow */
+.theme-nature .theme-dialog::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-dialog);
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 90%,
+      rgba(20, 15, 5, 0.18) 0%, transparent 100%),
+    linear-gradient(to top,
+      rgba(20, 15, 5, 0.15) 0%,
+      transparent 35%);
+  box-shadow:
+    inset 0 0 50px rgba(40, 30, 15, 0.18),
+    inset 0 0 12px rgba(20, 15, 5, 0.14),
+    inset 0 2px 0  rgba(185, 180, 158, 0.35);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Vine intrusion at dialog corners + animation */
+.theme-nature .theme-dialog::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--radius-dialog);
+  background-image:
+    radial-gradient(ellipse 80px 65px at -4% 108%,
+      rgba(48, 92, 44, 0.52) 0%, rgba(42, 82, 38, 0.20) 48%, transparent 100%),
+    radial-gradient(ellipse 22px 55px at 0% 75%,
+      rgba(58, 108, 52, 0.32) 0%, transparent 100%),
+    radial-gradient(ellipse 55px 45px at 104% -4%,
+      rgba(50, 94, 45, 0.42) 0%, rgba(42, 80, 38, 0.16) 50%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 348 180' preserveAspectRatio='none'%3E%3Cpath d='M 0,155 C 10,150 18,158 28,152 C 38,146 35,135 45,132 C 55,129 62,138 70,130' stroke='%23385C32' stroke-width='1.5' fill='none' stroke-opacity='0.40' stroke-linecap='round'/%3E%3Cellipse cx='15' cy='155' rx='6' ry='4' fill='%233A6834' fill-opacity='0.28'/%3E%3Cellipse cx='45' cy='138' rx='4' ry='5' fill='%233A6834' fill-opacity='0.22'/%3E%3Cpath d='M 320,0 C 315,10 322,18 316,28 C 310,38 300,35 298,45' stroke='%23385C32' stroke-width='1.2' fill='none' stroke-opacity='0.32' stroke-linecap='round'/%3E%3Cellipse cx='318' cy='14' rx='5' ry='3' fill='%233A6834' fill-opacity='0.24'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 11;
+  transform-origin: 0% 100%;
+  animation: nature-vine-sway 24s ease-in-out 5s infinite;
+}
+
+/* Titlebar — worn concrete header strip */
+.theme-nature .dialog-titlebar {
+  background: linear-gradient(
+    to bottom,
+    rgba(155, 148, 125, 0.55) 0%,
+    rgba(135, 128, 105, 0.35) 100%
+  );
+  border-bottom: 2px solid rgba(40, 30, 15, 0.30);
+}
+
+/* Traffic lights → rusted metal rivets */
+.theme-nature .tl-btn {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 1px 2px rgba(0,0,0,0.35),
+    inset 0 -1px 1px rgba(180,160,120,0.25);
+}
+.theme-nature .tl--close  { background: rgba(120, 90, 50, 0.55); }
+.theme-nature .tl--min    { background: rgba(110, 85, 48, 0.50); }
+.theme-nature .tl--expand { background: rgba(100, 80, 45, 0.48); }
+
+/* Tab buttons — carved stone blocks with deep recess */
+.theme-nature .theme-tab {
+  position: relative;
+  border-width: 2px;
+  background-image: linear-gradient(
+    168deg,
+    rgba(175, 168, 145, 0.50) 0%,
+    rgba(155, 148, 125, 0.25) 35%,
+    rgba(140, 132, 108, 0.40) 70%,
+    rgba(125, 118, 95, 0.55) 100%
+  );
+  box-shadow:
+    inset 0 2px 0    rgba(185, 180, 158, 0.48),
+    inset 0 -3px 10px rgba(20, 15, 5, 0.25),
+    inset 2px 0 6px  rgba(20, 15, 5, 0.08),
+    inset -2px 0 6px rgba(20, 15, 5, 0.07),
+    0 2px 4px rgba(20, 15, 5, 0.15);
+}
+
+/* Asymmetric radii per button */
+.theme-nature .theme-tab:nth-child(1) { border-radius: 3px 2px 4px 2px; }
+.theme-nature .theme-tab:nth-child(2) { border-radius: 2px 3px 2px 3px; }
+.theme-nature .theme-tab:nth-child(3) { border-radius: 2px 4px 3px 2px; }
+
+/* ── 10.5 File icons — weathered relics ─────────────────────── */
+
+.theme-nature .icons-layer {
+  position: absolute;
+  padding: 0;
+  isolation: isolate;
+}
+
+/* Faint atmospheric veil to separate icon column from busy foliage */
+.theme-nature .icons-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-icon);
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(10, 14, 9, 0.26) 0%,
+      rgba(12, 17, 10, 0.18) 45%,
+      rgba(9, 13, 8, 0.28) 100%
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(132, 150, 118, 0.10),
+    0 12px 28px rgba(8, 11, 7, 0.18);
+  backdrop-filter: blur(1.5px) saturate(0.85);
+  -webkit-backdrop-filter: blur(1.5px) saturate(0.85);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.78;
+}
+
+.theme-nature .file-icon {
+  position: relative;
+  overflow: visible;
+  background:
+    radial-gradient(
+      ellipse 78% 62% at 50% 46%,
+      rgba(128, 146, 112, 0.14) 0%,
+      rgba(44, 56, 36, 0.10) 70%,
+      transparent 100%
+    );
+  box-shadow: 0 0 0 1px rgba(138, 154, 122, 0.06);
+  backdrop-filter: blur(0.8px);
+  -webkit-backdrop-filter: blur(0.8px);
+  border-radius: var(--radius-icon);
+}
+
+/* Individual tilts per icon */
+.theme-nature .file-icon:nth-child(1) { transform: rotate(-2deg);  }
+.theme-nature .file-icon:nth-child(2) { transform: rotate(1.5deg); }
+.theme-nature .file-icon:nth-child(3) { transform: rotate(-1deg);  }
+.theme-nature .file-icon:nth-child(4) { transform: rotate(2.5deg); }
+.theme-nature .file-icon:nth-child(5) { transform: rotate(-0.5deg);}
+.theme-nature .file-icon:nth-child(6) { transform: rotate(1.8deg); }
+
+/* Icon glyphs — heavily corroded, faded relics */
+.theme-nature .icon-glyph {
+  filter:
+    saturate(0.36)
+    brightness(0.84)
+    sepia(0.24)
+    contrast(0.94)
+    drop-shadow(0 1px 2px rgba(8, 10, 6, 0.45))
+    drop-shadow(0 0 8px rgba(138, 165, 116, 0.16));
+  opacity: 0.74;
+}
+
+/* Labels — warm but dim, heavy shadow for readability */
+.theme-nature .icon-label {
+  color: rgba(214, 206, 178, 0.92);
+  opacity: 0.92;
+  text-shadow:
+    0 1px 2px rgba(6, 7, 4, 0.72),
+    0 2px 7px rgba(8, 10, 6, 0.58),
+    0 0 10px rgba(122, 148, 102, 0.14);
+}
+
+/* Slightly stronger contrast on hover without becoming UI-bright */
+.theme-nature .file-icon:hover .icon-glyph {
+  opacity: 0.82;
+  filter:
+    saturate(0.42)
+    brightness(0.90)
+    sepia(0.20)
+    contrast(0.98)
+    drop-shadow(0 1px 2px rgba(8, 10, 6, 0.50))
+    drop-shadow(0 0 10px rgba(142, 172, 118, 0.20));
+}
+
+.theme-nature .file-icon:hover .icon-label {
+  color: rgba(221, 214, 189, 0.95);
+  text-shadow:
+    0 1px 2px rgba(6, 7, 4, 0.76),
+    0 2px 8px rgba(8, 10, 6, 0.62),
+    0 0 12px rgba(126, 152, 106, 0.20);
+}
+
+/* ── 10.5b File icon vine overlays (::after) ──────────────────── */
+
+.theme-nature .file-icon::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-icon);
+  pointer-events: none;
+}
+
+/* Icons 1,3,5 — vine from bottom-left */
+.theme-nature .file-icon:nth-child(odd)::after {
+  background-image:
+    radial-gradient(ellipse 70% 35% at 50% 110%,
+      rgba(42, 92, 48, 0.42) 0%, rgba(42, 92, 48, 0.15) 55%, transparent 100%),
+    radial-gradient(ellipse 30px 22px at 10% 85%,
+      rgba(56, 100, 52, 0.30) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 90' preserveAspectRatio='none'%3E%3Cpath d='M 5,88 C 8,78 4,68 8,60 C 12,52 18,56 16,48' stroke='%23385C32' stroke-width='0.8' fill='none' stroke-opacity='0.30' stroke-linecap='round'/%3E%3Cellipse cx='8' cy='65' rx='3' ry='2' fill='%233A6834' fill-opacity='0.22'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+}
+
+/* Icons 2,4,6 — vine from top-right */
+.theme-nature .file-icon:nth-child(even)::after {
+  background-image:
+    radial-gradient(ellipse 60% 30% at 90% -5%,
+      rgba(48, 96, 50, 0.38) 0%, rgba(42, 86, 44, 0.14) 55%, transparent 100%),
+    radial-gradient(ellipse 25px 20px at 80% 15%,
+      rgba(56, 100, 52, 0.28) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 90' preserveAspectRatio='none'%3E%3Cpath d='M 72,2 C 68,12 74,22 70,30 C 66,38 58,35 60,44' stroke='%23385C32' stroke-width='0.8' fill='none' stroke-opacity='0.30' stroke-linecap='round'/%3E%3Cellipse cx='70' cy='22' rx='3' ry='2' fill='%233A6834' fill-opacity='0.20'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+}
+
+/* ── 10.6 Dock — stone/ruin base ─────────────────────────────── */
+
+.theme-nature .dock {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-width: 2px;
+  border-radius: 3px 5px 4px 6px;
+  background-image: linear-gradient(
+    90deg,
+    rgba(55, 48, 32, 0.50) 0%,
+    rgba(65, 58, 42, 0.28) 20%,
+    rgba(72, 65, 48, 0.18) 40%,
+    rgba(68, 60, 44, 0.22) 60%,
+    rgba(60, 52, 36, 0.35) 80%,
+    rgba(50, 44, 28, 0.48) 100%
+  );
+  box-shadow:
+    var(--shadow-dock),
+    0 0 20px rgba(54, 96, 50, 0.14),
+    inset 0 2px 0    rgba(145, 138, 112, 0.35),
+    inset 0 -5px 18px rgba(10, 8, 2, 0.40),
+    inset 4px 0 8px  rgba(10, 8, 2, 0.14),
+    inset -4px 0 8px rgba(10, 8, 2, 0.14);
+}
+
+/* Dock cracks + moss growing from cracks */
+.theme-nature .dock::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-dock);
+  background-image:
+    radial-gradient(ellipse 30px 20px at 25% 45%,
+      rgba(52, 96, 48, 0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 24px 18px at 65% 55%,
+      rgba(48, 90, 44, 0.28) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 68' preserveAspectRatio='none'%3E%3Cpath d='M 80,0 L 79,5 L 78,12 L 82,17 L 85,22 L 80,30 L 76,38 L 79,45 L 82,52 L 79,60 L 78,68' stroke='%23060200' stroke-width='6' fill='none' stroke-opacity='0.12' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 80,0 L 79,5 L 78,12 L 82,17 L 85,22 L 80,30 L 76,38 L 79,45 L 82,52 L 79,60 L 78,68' stroke='%23180e02' stroke-width='1.6' fill='none' stroke-opacity='0.60' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 81,0 L 80,5 L 79,12 L 83,17 L 86,22 L 81,30 L 77,38 L 80,45 L 83,52 L 80,60 L 79,68' stroke='%23d8c89a' stroke-width='0.5' fill='none' stroke-opacity='0.13' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 280,0 L 278,7 L 276,15 L 280,21 L 284,28 L 277,35 L 272,42 L 275,50 L 278,58' stroke='%23060200' stroke-width='5' fill='none' stroke-opacity='0.10' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 280,0 L 278,7 L 276,15 L 280,21 L 284,28 L 277,35 L 272,42 L 275,50 L 278,58' stroke='%23180e02' stroke-width='1.5' fill='none' stroke-opacity='0.52' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 440,68 L 442,61 L 445,52 L 441,45 L 438,38 L 443,30 L 448,22 L 445,15 L 442,8' stroke='%23060200' stroke-width='5' fill='none' stroke-opacity='0.10' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 440,68 L 442,61 L 445,52 L 441,45 L 438,38 L 443,30 L 448,22 L 445,15 L 442,8' stroke='%23180e02' stroke-width='1.3' fill='none' stroke-opacity='0.46' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M 150,35 L 165,33 L 180,32 L 195,35 L 210,38 L 225,35 L 240,34 M 350,30 L 365,33 L 380,35 L 395,31 L 410,28' stroke='%23180e02' stroke-width='0.7' fill='none' stroke-opacity='0.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Organic growth at dock ends + animation */
+.theme-nature .dock::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--radius-dock);
+  background-image:
+    radial-gradient(ellipse 75px 65px at -4% 50%,
+      rgba(44, 96, 50, 0.55) 0%, rgba(44, 96, 50, 0.22) 48%, transparent 100%),
+    radial-gradient(ellipse 30px 50px at 3% 15%,
+      rgba(60, 112, 64, 0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 60px 58px at 104% 50%,
+      rgba(44, 96, 50, 0.48) 0%, rgba(44, 96, 50, 0.18) 50%, transparent 100%),
+    radial-gradient(ellipse 20px 16px at 35% 80%,
+      rgba(50, 94, 46, 0.28) 0%, transparent 100%),
+    radial-gradient(ellipse 18px 14px at 55% 75%,
+      rgba(50, 94, 46, 0.24) 0%, transparent 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 68' preserveAspectRatio='none'%3E%3Cpath d='M 0,35 C 15,32 25,40 40,36 C 55,32 50,22 65,25 C 80,28 85,38 95,34' stroke='%23385C32' stroke-width='1.2' fill='none' stroke-opacity='0.38' stroke-linecap='round'/%3E%3Cellipse cx='20' cy='36' rx='5' ry='3' fill='%233A6834' fill-opacity='0.25'/%3E%3Cellipse cx='60' cy='28' rx='4' ry='3' fill='%233A6834' fill-opacity='0.20'/%3E%3Cpath d='M 560,32 C 545,30 535,38 520,34 C 505,30 510,20 495,24' stroke='%23385C32' stroke-width='1' fill='none' stroke-opacity='0.32' stroke-linecap='round'/%3E%3Cellipse cx='540' cy='33' rx='4' ry='3' fill='%233A6834' fill-opacity='0.22'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  pointer-events: none;
+  z-index: 2;
+  animation: nature-plant-sway 29s ease-in-out 14s infinite;
+}
+
+/* Separator — crack/fissure in stone with moss */
+.theme-nature .dock__separator {
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(40, 30, 15, 0.35),
+    rgba(58, 100, 52, 0.30),
+    rgba(40, 30, 15, 0.35)
+  );
+}
+
+/* Dock icons — corroded, faded metal */
+.theme-nature .dock__icon {
+  filter: saturate(0.30) brightness(0.72) sepia(0.15);
+}
+
+/* ── 10.7 Hover / interaction states ─────────────────────────── */
+
+.theme-nature .dock__item {
+  transition: transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease;
+}
+
+.theme-nature .dock__item:hover {
+  transform: translateY(-2px);
+  background: rgba(74, 124, 89, 0.12);
+  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.25);
+}
+
+/* Tab hover — pressed inward into stone */
+.theme-nature .theme-tab:hover {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 3px 2px  rgba(20, 15, 5, 0.30),
+    inset 0 -2px 8px rgba(20, 15, 5, 0.20),
+    inset 2px 0 6px  rgba(20, 15, 5, 0.10),
+    inset -2px 0 6px rgba(20, 15, 5, 0.10),
+    0 1px 2px rgba(20, 15, 5, 0.10);
+  background-image: linear-gradient(
+    168deg,
+    rgba(155, 148, 125, 0.45) 0%,
+    rgba(135, 128, 105, 0.30) 35%,
+    rgba(120, 112, 88, 0.45) 70%,
+    rgba(105, 98, 75, 0.55) 100%
+  );
+}
+
+/* Active tab — deeply pressed into stone, mossy recess */
+.theme-nature .theme-tab--active {
+  transform: translateY(2px);
+  background-image: linear-gradient(
+    168deg,
+    rgba(90, 80, 58, 0.70) 0%,
+    rgba(75, 68, 48, 0.55) 35%,
+    rgba(62, 56, 38, 0.65) 70%,
+    rgba(50, 44, 28, 0.75) 100%
+  );
+  border-color: rgba(20, 15, 5, 0.65);
+  color: rgba(195, 185, 150, 0.95);
+  box-shadow:
+    inset 0 4px 6px  rgba(10, 7, 2, 0.55),
+    inset 0 -1px 4px rgba(10, 7, 2, 0.30),
+    inset 3px 0 8px  rgba(10, 7, 2, 0.22),
+    inset -3px 0 8px rgba(10, 7, 2, 0.22),
+    0 1px 0 rgba(195, 185, 150, 0.18);
+  text-shadow: 0 1px 3px rgba(10, 7, 2, 0.60);
+}
+
+/* Widget hover — very subtle organic breathing */
+.theme-nature .widget-card:hover {
+  filter: brightness(1.02);
+}
+
+/* ── 10.8 Applied structural refinement (full apply only) ─────── */
+.theme-nature .theme-dialog {
+  border-width: 2px;
+  border-radius: 4px 6px 3px 5px;
+  box-shadow:
+    var(--shadow-dialog),
+    inset 0 1px 0 rgba(190, 184, 160, 0.20),
+    inset 0 -10px 28px rgba(16, 12, 5, 0.18);
+}
+
+.theme-nature .widget-card {
+  border-width: 2px;
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(190, 184, 160, 0.18),
+    inset 0 -10px 24px rgba(16, 12, 5, 0.16);
+}
+
+.theme-nature .file-icon {
+  box-shadow:
+    0 0 0 1px rgba(58, 76, 44, 0.22),
+    inset 0 1px 0 rgba(170, 182, 142, 0.10);
+}

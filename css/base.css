@@ -1,0 +1,298 @@
+/* ================================================================
+   base.css
+   CSS custom properties (design tokens) and structural primitives.
+
+   Two groups inside :root:
+   · Theme-driven  — override these inside .theme-* classes
+   · System constants — never override; OS-stable across all themes
+
+   Theme variable blocks (.theme-nature etc.) live here too —
+   they only set token values. Actual element overrides are in
+   the per-theme files (theme-nature.css etc.).
+   ================================================================ */
+
+/* ──────────────────────────────────────────────────────────────
+   1. CSS VARIABLES
+   ────────────────────────────────────────────────────────────── */
+:root {
+
+  /* ── THEME-DRIVEN ─────────────────────────────────────────── */
+
+  /* Background */
+  --bg-base: #EDEEF0;
+  --bg-gradient:
+    radial-gradient(ellipse at 28% 18%, rgba(255,255,255,0.52) 0%, transparent 52%),
+    radial-gradient(ellipse at 80% 88%, rgba(195,200,210,0.50) 0%, transparent 48%),
+    linear-gradient(to bottom, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.06) 100%);
+
+  /* Surfaces */
+  --surface-card:        #FFFFFF;
+  --surface-card-subtle: rgba(255, 255, 255, 0.88);
+  --surface-dock:        rgba(255, 255, 255, 0.82);
+  --surface-dialog:      rgba(255, 255, 255, 0.97);
+  --surface-tab:         rgba(0, 0, 0, 0.02);
+
+  /* Borders */
+  --border-card:        rgba(0, 0, 0, 0.08);
+  --border-card-subtle: rgba(0, 0, 0, 0.05);
+  --border-divider:     rgba(0, 0, 0, 0.07);
+  --border-dock:        rgba(255, 255, 255, 0.90);
+  --border-dialog:      rgba(0, 0, 0, 0.12);
+  --border-tab:         rgba(0, 0, 0, 0.09);
+
+  /* Radius */
+  --radius-card:      14px;
+  --radius-dock:      20px;
+  --radius-dock-item: 12px;
+  --radius-dialog:    12px;
+  --radius-tab:        9px;
+  --radius-icon:       8px;
+
+  /* Shadows */
+  --shadow-card:          0 1px 3px rgba(0,0,0,0.06),  0 6px 20px rgba(0,0,0,0.08);
+  --shadow-card-elevated: 0 2px 8px rgba(0,0,0,0.08),  0 12px 40px rgba(0,0,0,0.13);
+  --shadow-card-subtle:   0 1px 2px rgba(0,0,0,0.04),  0 3px 10px rgba(0,0,0,0.05);
+  --shadow-dock:          0 2px 6px rgba(0,0,0,0.08),  0 10px 34px rgba(0,0,0,0.12);
+  --shadow-dialog:
+    0 1px 3px   rgba(0,0,0,0.10),
+    0 8px 24px  rgba(0,0,0,0.16),
+    0 24px 64px rgba(0,0,0,0.14),
+    0 0 0 0.5px rgba(0,0,0,0.06);
+
+  /* Color */
+  --accent:         #2B6FED;
+
+  /* Text */
+  --text-primary:   #1A1A1A;
+  --text-secondary: #666;
+  --text-muted:     #999;
+  --text-faint:     #aaa;
+
+  /* Signature font — set per theme; applied only to display moments */
+  --font-signature: inherit;
+
+
+  /* ── SYSTEM CONSTANTS ────────────────────────────────────────
+     OS-level values. Do not override in .theme-* classes.
+     ─────────────────────────────────────────────────────────── */
+
+  --blur-dock:   20px;
+  --blur-dialog: 24px;
+
+  /* Theme transition — shared duration + easing for all hover previews */
+  --transition-theme: 700ms ease-in-out;
+
+  /* OS status indicator dots */
+  --status-green: #34C759;
+  --status-red:   #FF3B30;
+  --status-blue:  #2B6FED;
+
+  /* File type icon palette */
+  --icon-blue:    #4A90D9;
+  --icon-yellow:  #F5C542;
+  --icon-green:   #5BBD72;
+  --icon-gray:    #999;
+  --icon-teal:    #3DB8B0;
+  --icon-purple:  #9B59B6;
+  --icon-red:     #FF3B30;
+  --icon-orange:  #F5A623;
+  --icon-pink:    #FF6B8A;
+  --icon-cyan:    #34AADC;
+  --icon-emerald: #2ECC71;
+
+  /* macOS traffic lights */
+  --tl-close:  #FF5F57;
+  --tl-min:    #FEBC2E;
+  --tl-expand: #28C840;
+
+  /* System UI font */
+  --font-system: 'Inter', system-ui, sans-serif;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   2. THEME TOKEN OVERRIDES
+   Only CSS variable assignments — no element rules here.
+   Element-level overrides live in the per-theme CSS files.
+   ────────────────────────────────────────────────────────────── */
+
+/* Default — explicit for clarity, mirrors :root */
+.theme-default {
+  /* No overrides needed — :root is the default */
+}
+
+/* ── Nature (Overgrown Ruins) ─────────────────────────────── */
+.theme-nature {
+  --bg-base: #4d6348;
+  --bg-gradient:
+    radial-gradient(ellipse at 50% 12%, rgba(155,188,125,0.32) 0%, transparent 55%),
+    radial-gradient(ellipse at 12% 98%, rgba(28,68,22,0.9)     0%, transparent 45%),
+    radial-gradient(ellipse at 88% 95%, rgba(22,62,18,0.7)     0%, transparent 40%),
+    radial-gradient(ellipse at 38% 58%, rgba(48,80,32,0.45)    0%, transparent 35%),
+    linear-gradient(to bottom, #8a9e8c 0%, #6e8070 18%, #4d6348 38%, #32492e 58%, #1f3319 78%, #111c0f 100%);
+
+  --surface-card:        #A8A48E;
+  --surface-card-subtle: rgba(145, 140, 118, 0.92);
+  --surface-dock:        rgba(42, 52, 34, 0.96);
+  --surface-dialog:      rgba(165, 158, 135, 0.98);
+  --surface-tab:         rgba(0, 0, 0, 0.06);
+
+  --border-card:        rgba(40, 30, 15, 0.35);
+  --border-card-subtle: rgba(40, 30, 15, 0.25);
+  --border-divider:     rgba(40, 30, 15, 0.22);
+  --border-dock:        rgba(40, 30, 15, 0.45);
+  --border-dialog:      rgba(40, 30, 15, 0.40);
+  --border-tab:         rgba(40, 30, 15, 0.30);
+
+  --radius-card:      3px;
+  --radius-dock:      4px;
+  --radius-dock-item: 2px;
+  --radius-dialog:    4px;
+  --radius-tab:       2px;
+  --radius-icon:      2px;
+
+  --shadow-card:          0 2px 4px rgba(20,15,5,0.25), 0 8px 24px rgba(20,15,5,0.30), 0 0 0 1px rgba(40,30,15,0.10);
+  --shadow-card-elevated: 0 3px 10px rgba(20,15,5,0.30), 0 14px 44px rgba(20,15,5,0.35);
+  --shadow-card-subtle:   0 1px 3px rgba(20,15,5,0.18), 0 4px 14px rgba(20,15,5,0.20);
+  --shadow-dock:          0 4px 10px rgba(10,8,2,0.35), 0 14px 40px rgba(10,8,2,0.40), 0 0 0 1px rgba(40,30,15,0.12);
+  --shadow-dialog:
+    0 2px 6px   rgba(20,15,5,0.28),
+    0 10px 30px rgba(20,15,5,0.35),
+    0 28px 70px rgba(20,15,5,0.28),
+    0 0 0 1px   rgba(40,30,15,0.15);
+
+  --accent:         #4A7C59;
+  --text-primary:   #1C2416;
+  --text-secondary: #4A5A44;
+  --text-muted:     #7A8A74;
+  --text-faint:     #9AAA94;
+
+  --font-signature: 'Cormorant SC', serif;
+}
+
+/* ── Divine (Heavenly) ────────────────────────────────────── */
+.theme-divine {
+  --bg-base: #fff8da;
+  --bg-gradient:
+    radial-gradient(ellipse at 50%  4%, rgba(255,250,215,0.95) 0%, transparent 42%),
+    radial-gradient(ellipse at 67% 14%, rgba(255,228,140,0.42) 0%, transparent 36%),
+    radial-gradient(ellipse at 33% 14%, rgba(255,238,162,0.36) 0%, transparent 34%),
+    radial-gradient(ellipse at 50% 52%, rgba(238,208,128,0.16) 0%, transparent 68%),
+    linear-gradient(to bottom, #fff8da 0%, #f5db88 17%, #e8c462 34%, #d9ae7e 54%, #c8cedc 78%, #a8b8d0 100%);
+
+  --surface-card:        #F9F3E3;
+  --surface-card-subtle: rgba(245, 238, 218, 0.88);
+  --surface-dock:        rgba(249, 243, 227, 0.90);
+  --surface-dialog:      rgba(255, 251, 238, 0.97);
+  --surface-tab:         rgba(201, 168, 76, 0.06);
+
+  --border-card:        rgba(201, 168, 76, 0.50);
+  --border-card-subtle: rgba(201, 168, 76, 0.30);
+  --border-divider:     rgba(201, 168, 76, 0.40);
+  --border-dock:        rgba(201, 168, 76, 0.55);
+  --border-dialog:      rgba(201, 168, 76, 0.55);
+  --border-tab:         rgba(201, 168, 76, 0.45);
+
+  --radius-card: 16px;
+
+  --shadow-card:          0 1px 3px rgba(140,100,20,0.14),  0 6px 20px rgba(140,100,20,0.22);
+  --shadow-card-elevated: 0 2px 8px rgba(140,100,20,0.18),  0 12px 40px rgba(140,100,20,0.28);
+  --shadow-card-subtle:   0 1px 2px rgba(140,100,20,0.08),  0 3px 10px rgba(140,100,20,0.14);
+  --shadow-dock:          0 2px 6px rgba(140,100,20,0.18),  0 10px 34px rgba(140,100,20,0.30);
+  --shadow-dialog:
+    0 1px 3px   rgba(140,100,20,0.18),
+    0 8px 24px  rgba(140,100,20,0.30),
+    0 24px 64px rgba(140,100,20,0.22),
+    0 0 0 0.5px rgba(201,168,76,0.30),
+    0 0 50px    rgba(201,168,76,0.22),
+    0 0 100px   rgba(201,168,76,0.10);
+
+  --accent:         #C9A84C;
+  --text-primary:   #2A1A00;
+  --text-secondary: #6A4A10;
+  --text-muted:     #9A7A40;
+  --text-faint:     #BAA070;
+
+  --font-signature: 'Carattere', cursive;
+}
+
+/* ── Cyberpunk ────────────────────────────────────────────── */
+.theme-cyberpunk {
+  --bg-base: #020510;
+  --bg-gradient:
+    radial-gradient(ellipse at 18% 68%, rgba(255, 45,120,0.20) 0%, transparent 32%),
+    radial-gradient(ellipse at 82% 38%, rgba(  0,255,255,0.16) 0%, transparent 30%),
+    radial-gradient(ellipse at 52% 90%, rgba(157, 78,221,0.13) 0%, transparent 28%),
+    radial-gradient(ellipse at 50%  0%, rgba(  0, 28, 58,0.75) 0%, transparent 50%),
+    linear-gradient(to bottom, #020510 0%, #060920 25%, #080d22 55%, #050818 80%, #030410 100%);
+
+  --surface-card:        #0F0F1E;
+  --surface-card-subtle: rgba(10, 10, 22, 0.88);
+  --surface-dock:        rgba(8, 8, 20, 0.92);
+  --surface-dialog:      rgba(6, 6, 18, 0.97);
+  --surface-tab:         rgba(0, 255, 255, 0.04);
+
+  --border-card:        rgba(0, 255, 255, 0.14);
+  --border-card-subtle: rgba(0, 255, 255, 0.08);
+  --border-divider:     rgba(0, 255, 255, 0.10);
+  --border-dock:        rgba(0, 255, 255, 0.18);
+  --border-dialog:      rgba(0, 255, 255, 0.22);
+  --border-tab:         rgba(0, 255, 255, 0.18);
+
+  --radius-card:      4px;
+  --radius-dock:      6px;
+  --radius-dock-item: 4px;
+  --radius-dialog:    4px;
+  --radius-tab:       2px;
+  --radius-icon:      2px;
+
+  --shadow-card:          0 1px 3px rgba(0,0,0,0.35),  0 6px 20px rgba(0,0,0,0.45);
+  --shadow-card-elevated: 0 2px 8px rgba(0,0,0,0.40),  0 12px 40px rgba(0,255,255,0.07);
+  --shadow-card-subtle:   0 1px 2px rgba(0,0,0,0.25),  0 3px 10px rgba(0,0,0,0.30);
+  --shadow-dock:          0 2px 6px rgba(0,0,0,0.50),  0 10px 34px rgba(0,0,0,0.55);
+  --shadow-dialog:
+    0 1px 3px   rgba(0,0,0,0.50),
+    0 8px 24px  rgba(0,255,255,0.10),
+    0 24px 64px rgba(0,0,0,0.55),
+    0 0 0 0.5px rgba(0,255,255,0.12);
+
+  --accent:         #00FFFF;
+  --text-primary:   #D0E8F8;
+  --text-secondary: #6888A0;
+  --text-muted:     #405868;
+  --text-faint:     #2E4050;
+
+  --font-signature: 'Orbitron', sans-serif;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   3. RESET
+   ────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-system);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   4. DESKTOP
+   ────────────────────────────────────────────────────────────── */
+.desktop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+}

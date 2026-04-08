@@ -135,7 +135,7 @@ The system is overloaded with information. It feels fast, reactive, and alive.
 | Theme | Signature Font |
 |-------|----------------|
 | Nature | Cormorant SC |
-| Divine | Carattere |
+| Divine | Charm |
 | Cyberpunk | Aldrich |
 
 Rules:
@@ -260,6 +260,21 @@ This is a system that changes identity through interaction.
 The user is not selecting a theme —
 they are activating a different world.
 
+### Refinement / Implementation Notes
+
+#### Refinement Notes (Post-Implementation)
+
+During development, several aspects of the system were refined to improve clarity, usability, and thematic consistency:
+
+- Typography was adjusted across themes (e.g., Cyberpunk uses Orbitron and Rajdhani) to strengthen visual identity and readability.
+- Typography changes were restricted to the apply state to reinforce the distinction between preview (hover) and commitment (click).
+- Staged transformation timing was slightly extended to make each phase more perceptible.
+- Cyberpunk ambient effects evolved from environmental rain to digital particle systems to better reflect a system-driven aesthetic.
+- The default state includes a subtle grain texture to avoid a completely flat surface while maintaining neutrality.
+- Decorative elements are lightly introduced during hover as a preview, but fully realized only upon apply.
+
+These refinements were intentional and support the core concept of the interface as a transforming system rather than a static theme switch.
+
 ## Mermaid Diagram
 
 ![Mermaid Diagram](assets/mermaid-diagram.png)
@@ -358,6 +373,38 @@ This approach kept the system clean and scalable while maintaining separation be
 
 ---
 
+### 6. Interaction Refinement — Strengthening Hover vs Apply
+
+**What I asked AI to do**
+I asked how to improve clarity between hover preview and click-based theme application.
+
+**What AI produced**
+AI initially suggested applying more visual elements during hover, including stronger typography and decorative effects.
+
+**What I kept / changed / rejected**
+I rejected applying full visual changes during hover and instead limited hover to subtle preview effects only. Full transformations, including typography and structural changes, were reserved for the apply (click) state.
+
+**Why**
+Allowing hover to fully apply theme elements weakened the distinction between preview and commitment. By restricting hover and strengthening the apply state, the interaction became more intentional and aligned with the core concept of system transformation.
+
+---
+
+### 7. Staging System Refinement — Improving Perceptibility
+
+**What I asked AI to do**
+I asked how to make the theme transformation feel more noticeable and immersive.
+
+**What AI produced**
+AI suggested using staged transitions with timed delays between different UI layers.
+
+**What I kept / changed / rejected**
+I kept the staged system but adjusted the timing and sequencing to make each phase more perceptible rather than blending together.
+
+**Why**
+The initial transitions felt too subtle and fast, reducing the sense of transformation. Refining the timing allowed users to clearly experience each stage, reinforcing the idea of the interface evolving rather than instantly switching.
+
+---
+
 ## Records of Resistance
 
 ### Record of Resistance 1
@@ -411,3 +458,18 @@ I rejected the output and provided more specific and stricter direction. I pushe
 ---
 
 ## Five Questions Reflection
+
+**1. Can I defend this?**
+Yes. Every major decision in this project, especially the separation between hover (preview) and click (commitment), is intentional and supports the core concept of system transformation. I can clearly explain why each interaction and visual behavior exists and how it contributes to the overall experience.
+
+**2. Is this mine?**
+Yes. While AI was used as a tool for ideation and implementation guidance, all key decisions, refinements, and final directions were made by me. I actively evaluated, modified, and sometimes rejected AI suggestions to ensure the outcome aligns with my concept.
+
+**3. Did I verify?**
+Yes. I tested the interaction behavior directly in the browser, especially hover vs apply states and staged transitions, to ensure they behave as intended. I also adjusted timing and visual intensity based on observation rather than relying only on initial outputs.
+
+**4. Would I teach this?**
+Yes. I can explain both the design concept and the implementation approach, including how to structure a theme system, manage state with class-based logic, and create staged interactions that improve user experience.
+
+**5. Is my documentation honest?**
+Yes. The documentation reflects both the original intent and the refinements made during development. Differences between the plan and the final implementation are clearly explained rather than hidden.
